@@ -1,0 +1,14 @@
+.main-container {
+  width: 100%;
+
+  .sidebar {
+    width: 240px;
+    min-height: 100vh;
+  }
+
+  .panel-view {
+    width: 100%;
+    padding: 40px;
+    border: 1px solid;
+  }
+}

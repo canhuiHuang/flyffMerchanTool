@@ -1,0 +1,22 @@
+{
+  "dynamic value": "気持ち　{{days}}",
+  "English": "英語",
+  "Japanese": "日本語",
+  "Chinese": "中国語",
+  "Spanish": "スペイン語",
+
+  "Create your Account": "Create your Account",
+  "register": "会員登録",
+  "login": "ログイン",
+  "email": "メールアドレス",
+  "password": "パスワード",
+  "password confirmation": "パスワードの確認",
+  "Sign Up": "Sign Up",
+
+  "empty field message": "This field can't be empty",
+  "invalid email input": "Email is invalid (インバリッド)",
+  "invalid password input": "Password must contain both letter and number and at least one Uppercase letter",
+  "password length error": "Password must be {{min}}-{{max}} characters",
+
+  "auth/email-already-in-use": "Email already in use"
+}

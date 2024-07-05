@@ -1,7 +1,7 @@
 import { Box, Checkbox, Collapse, Editable, EditableInput, EditablePreview, Input, Stack } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
@@ -146,7 +146,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                   <Checkbox
                     onChange={(e) => onSelectHandle(e.target.checked, idx)}
                     colorScheme="red"
-                    checked={selected.includes(idx)}
+                    isChecked={selected.includes(idx)}
                   ></Checkbox>
                 </Td>
               </Tr>

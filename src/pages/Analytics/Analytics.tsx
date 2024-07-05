@@ -25,40 +25,50 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
 
   const totalPenya = (merchArray: Array<Merch>): number => {
     let penya: number = 0;
-    merchArray.forEach((merchItem) => {
-      penya += Number(merchItem.price) * Number(merchItem.amount);
-    });
+    merchArray
+      .filter((merchItem) => merchItem.itemName)
+      .forEach((merchItem) => {
+        penya += Number(merchItem.price) * Number(merchItem.amount);
+      });
     return penya;
   };
 
   const soldAmount = (itemName?: string): number => {
     let count: number = 0;
-    merchOut.forEach((merchItem) => {
-      if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase()) count += Number(merchItem.amount);
-    });
+    merchOut
+      .filter((merchItem) => merchItem.itemName)
+      .forEach((merchItem) => {
+        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase()) count += Number(merchItem.amount);
+      });
     return count;
   };
   const boughtAmount = (itemName?: string): number => {
     let count: number = 0;
-    merchIn.forEach((merchItem) => {
-      if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase()) count += Number(merchItem.amount);
-    });
+    merchIn
+      .filter((merchItem) => merchItem.itemName)
+      .forEach((merchItem) => {
+        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase()) count += Number(merchItem.amount);
+      });
     return count;
   };
   const amountSpent = (itemName?: string): number => {
     let penya: number = 0;
-    merchIn.forEach((merchItem) => {
-      if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase())
-        penya += Number(merchItem.amount) * Number(merchItem.price);
-    });
+    merchIn
+      .filter((merchItem) => merchItem.itemName)
+      .forEach((merchItem) => {
+        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase())
+          penya += Number(merchItem.amount) * Number(merchItem.price);
+      });
     return penya;
   };
   const amountSold = (itemName?: string): number => {
     let penya: number = 0;
-    merchOut.forEach((merchItem) => {
-      if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase())
-        penya += Number(merchItem.amount) * Number(merchItem.price);
-    });
+    merchOut
+      .filter((merchItem) => merchItem.itemName)
+      .forEach((merchItem) => {
+        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase())
+          penya += Number(merchItem.amount) * Number(merchItem.price);
+      });
     return penya;
   };
   const expectedTotalSales = (itemName?: string): number => {

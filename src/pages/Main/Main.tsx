@@ -2,7 +2,7 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 import MerchInput from '../../components/MerchInput/MerchInput';
 import './Main.scss';
 import './MerchInputs.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveLocalData } from '../../store/Slices/localDataSlice';
@@ -23,7 +23,11 @@ const Main = () => {
   const dispatch = useDispatch();
   const localData = useSelector((state: RootState) => state.localData);
 
-  const [inventory, setInventory] = useState({ merchIn: localData.merchIn, merchOut: localData.merchOut });
+  const [inventory, setInventory] = useState({
+    merchIn: localData.merchIn,
+    merchOut: localData.merchOut,
+    items: localData.items,
+  });
 
   const updateMerch = (type: 'in' | 'out', index: number, newVal: any, keyName: keyName) => {
     const merchType = type === 'in' ? 'merchIn' : 'merchOut';
@@ -67,6 +71,15 @@ const Main = () => {
   const updateMerchOut = (index: number, newVal: any, keyName: keyName) => updateMerch('out', index, newVal, keyName);
   const deleteMerchIn = (selected: Array<number>) => deleteMerch('in', selected);
   const deleteMerchOut = (selected: Array<number>) => deleteMerch('out', selected);
+
+  // useEffect(() => {
+  //   const delayDebounceFn = setTimeout(() => {
+  //     console.log(inventory);
+  //     // Send Axios request here
+  //   }, 3000);
+
+  //   return () => clearTimeout(delayDebounceFn);
+  // }, [inventory]);
 
   const csvHeaders = [
     { label: 'description', key: 'description' },
@@ -117,7 +130,7 @@ const Main = () => {
               <MerchInput
                 type="out"
                 merch={inventory.merchOut}
-                items={localData.items}
+                items={inventory.items}
                 updateMerch={updateMerchOut}
                 addMerch={() => addMerch('out')}
                 deleteMerch={deleteMerchOut}
@@ -126,7 +139,7 @@ const Main = () => {
           )}
         </Box>
         <Box>
-          <Analytics inventory={{ ...inventory, items: localData.items }} />
+          <Analytics inventory={inventory} />
         </Box>
       </div>
       <ItemsManager />

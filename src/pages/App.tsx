@@ -11,12 +11,13 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Router>
+      {/* <Router>
         <Routes>
           <Route element={<Main />} path="/main/*"></Route>
           <Route path="/*" element={<Navigate replace to="main" />} />
         </Routes>
-      </Router>
+      </Router> */}
+      <Main />
     </div>
   );
 }

@@ -28,7 +28,7 @@ const Header = () => {
         <Box>
           <Image
             height={50}
-            src="public\assests\logo.png"
+            src="assests/logo.png"
             fallbackSrc="https://ciep.mx/wp-content/uploads/2019/09/placeholder.png"
           />
           <h1>Merch Tracker</h1>

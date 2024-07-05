@@ -78,7 +78,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                     />
                   </Editable>
                 </Td>
-                <Td>
+                <Td className="name">
                   <Editable defaultValue={item.itemName || undefined}>
                     <EditablePreview />
                     <EditableInput

@@ -25,7 +25,7 @@
     "addMerch": "Add new merch",
     "addNewItem": "Add new item",
     "totalSpent": "Total spent",
-    "saleOverExpectedSales": "Sale / Expected Sales",
+    "saleOverExpectedSales": "Real Sales / Expected Sales",
     "amountBought": "Bought",
     "amountSold": "Sold",
     "delete": "Delete",
@@ -64,7 +64,7 @@
       "goalPrice": "Goal Price",
       "soldOverBought": "Sold / Bought",
       "available": "Available",
-      "saleOverSpent": "Sale / Spent",
+      "saleOverSpent": "Sales / Spent",
       "earnings": "Earnings",
       "expectedEarnings": "Expected Earnings"
     }

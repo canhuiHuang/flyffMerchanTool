@@ -10,8 +10,10 @@ import { RootState } from '../../store/store';
 import ItemsManager from '../../components/ItemsManager/ItemsManager';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Analytics from '../Analytics/Analytics';
+import { Inventory, Items, Merch } from '../../utils/types';
 
 type keyName = 'description' | 'itemName' | 'price' | 'amount' | 'date' | 'goalPrice';
+type MerchType = 'merchIn' | 'merchOut' | 'items';
 interface Item {
   name: string;
   goalPrice: number;
@@ -29,48 +31,56 @@ const Main = () => {
     items: localData.items,
   });
 
-  const updateMerch = (type: 'in' | 'out', index: number, newVal: any, keyName: keyName) => {
-    const merchType = type === 'in' ? 'merchIn' : 'merchOut';
-    const newMerchArray = [...inventory[merchType]];
-    newMerchArray[index] = { ...newMerchArray[index], [keyName]: newVal };
-    setInventory({ ...inventory, [merchType]: [...newMerchArray] });
-    dispatch(saveLocalData({ [merchType]: [...newMerchArray] }));
-  };
-  const addMerch = (type: 'in' | 'out') => {
-    const merchType = type === 'in' ? 'merchIn' : 'merchOut';
-
-    const d = new Date();
-
-    const newInventory = {
-      [merchType]: [
-        ...inventory[merchType],
-        {
-          description: null,
-          itemName: null,
-          price: null,
-          amount: null,
-          date: [d.getFullYear(), ('0' + (d.getMonth() + 1)).slice(-2), ('0' + d.getDate()).slice(-2)].join('-'),
-          goalPrice: null,
-        },
-      ],
-    };
-    setInventory({ ...inventory, ...newInventory });
+  const save = (type: MerchType, newMerchArray: Array<any>): void => {
+    const newInventory = { ...inventory, [type]: [...newMerchArray] };
+    setInventory(newInventory);
     dispatch(saveLocalData(newInventory));
   };
 
-  const deleteMerch = (type: 'in' | 'out', selected: Array<number>) => {
-    // Add confirmation modal later
-
-    const merchType = type === 'in' ? 'merchIn' : 'merchOut';
-    const newMerchArray = [...inventory[merchType]].filter((item, idx) => !selected.includes(idx));
-    setInventory({ ...inventory, [merchType]: [...newMerchArray] });
-    dispatch(saveLocalData({ [merchType]: [...newMerchArray] }));
+  const updateMerch = (type: MerchType, index: number, newVal: any, keyName: keyName) => {
+    const newMerchArray = [...inventory[type]];
+    newMerchArray[index] = { ...newMerchArray[index], [keyName]: newVal };
+    save(type, newMerchArray);
   };
 
-  const updateMerchIn = (index: number, newVal: any, keyName: keyName) => updateMerch('in', index, newVal, keyName);
-  const updateMerchOut = (index: number, newVal: any, keyName: keyName) => updateMerch('out', index, newVal, keyName);
-  const deleteMerchIn = (selected: Array<number>) => deleteMerch('in', selected);
-  const deleteMerchOut = (selected: Array<number>) => deleteMerch('out', selected);
+  const addMerch = (type: MerchType) => {
+    const d = new Date();
+
+    const newMerchArray = [
+      ...inventory[type],
+      {
+        description: null,
+        itemName: null,
+        price: null,
+        amount: null,
+        date: [d.getFullYear(), ('0' + (d.getMonth() + 1)).slice(-2), ('0' + d.getDate()).slice(-2)].join('-'),
+        goalPrice: null,
+      },
+    ];
+
+    save(type, newMerchArray);
+  };
+
+  const deleteMerch = (type: MerchType, selected: Array<number>) => {
+    // Add confirmation modal later //
+
+    const newMerchArray = [...inventory[type]].filter((item, idx) => !selected.includes(idx));
+    save(type, newMerchArray);
+  };
+
+  const addMerchIn = () => addMerch('merchIn');
+  const addMerchOut = () => addMerch('merchOut');
+  const addItem = () => addMerch('items');
+
+  const updateMerchIn = (index: number, newVal: any, keyName: keyName) =>
+    updateMerch('merchIn', index, newVal, keyName);
+  const updateMerchOut = (index: number, newVal: any, keyName: keyName) =>
+    updateMerch('merchOut', index, newVal, keyName);
+  const updateItem = (index: number, newVal: any, keyName: keyName) => updateMerch('items', index, newVal, keyName);
+
+  const deleteMerchIn = (selected: Array<number>) => deleteMerch('merchIn', selected);
+  const deleteMerchOut = (selected: Array<number>) => deleteMerch('merchOut', selected);
+  const deleteItems = (selected: Array<number>) => deleteMerch('items', selected);
 
   // useEffect(() => {
   //   const delayDebounceFn = setTimeout(() => {
@@ -124,7 +134,7 @@ const Main = () => {
                 type="in"
                 merch={inventory.merchIn}
                 updateMerch={updateMerchIn}
-                addMerch={() => addMerch('in')}
+                addMerch={addMerchIn}
                 deleteMerch={deleteMerchIn}
               />
               <MerchInput
@@ -132,7 +142,7 @@ const Main = () => {
                 merch={inventory.merchOut}
                 items={inventory.items}
                 updateMerch={updateMerchOut}
-                addMerch={() => addMerch('out')}
+                addMerch={addMerchOut}
                 deleteMerch={deleteMerchOut}
               />
             </>
@@ -142,7 +152,7 @@ const Main = () => {
           <Analytics inventory={inventory} />
         </Box>
       </div>
-      <ItemsManager />
+      <ItemsManager items={inventory.items} updateItem={updateItem} addItem={addItem} deleteItems={deleteItems} />
     </Flex>
   );
 };

@@ -23,6 +23,7 @@ export const LocalDataState = createSlice({
     saveLocalData: (state, action: PayloadAction<{ [propName: string]: Array<Merch> | Array<Item> }>) => {
       state = { ...state, ...action.payload };
       localStorage.setItem('localData', JSON.stringify(state));
+      console.log('saved', state);
     },
     saveItem: (state, action: PayloadAction<{ [propName: string]: Item }>) => {
       state = {

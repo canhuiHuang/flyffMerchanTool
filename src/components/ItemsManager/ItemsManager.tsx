@@ -13,18 +13,22 @@ import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/reac
 import CurrencyInput from 'react-currency-input-field';
 import { formatValue } from 'react-currency-input-field';
 import { Button } from '@chakra-ui/react';
-import { Items, Item } from '../../utils/types';
+import { Item } from '../../utils/types';
 import { useTranslation } from 'react-i18next';
-import { RootState } from '../../store/store';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { useState } from 'react';
 
 import './ItemsManager.scss';
-import { saveLocalData } from '../../store/Slices/localDataSlice';
 
-const ItemsManager = () => {
+interface Props {
+  items: Array<Item>;
+  updateItem: Function;
+  addItem: Function;
+  deleteItems: Function;
+}
+
+const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const { isOpen, onToggle } = useDisclosure();
   const [selected, setSelected] = useState<Array<number>>([]);
@@ -36,25 +40,9 @@ const ItemsManager = () => {
     }
   };
 
-  const localData = useSelector((state: RootState) => state.localData);
-  const [items, setItems] = useState([...localData.items]);
-  const updateItem = (index: number, newVal: any, keyName: string) => {
-    const newItems = [...items];
-    newItems[index] = { ...newItems[index], [keyName]: newVal };
-    setItems(newItems);
-    dispatch(saveLocalData({ items: newItems }));
-  };
-  const addItem = () => {
-    const newItems = [...items, {}];
-    setItems(newItems);
-    dispatch(saveLocalData({ items: newItems }));
-  };
   const onDeleteHandler = () => {
-    // Add confirmation modal later
-    const newItems = items.filter((item, idx) => !selected.includes(idx));
-    setItems(newItems);
-    dispatch(saveLocalData({ items: newItems }));
-    setSelected([]);
+    // Add confirmation modal later //
+    deleteItems(selected);
   };
 
   return (
@@ -86,10 +74,6 @@ const ItemsManager = () => {
                       <Th>{t('fields.title.description')}</Th>
                       <Th>{t('fields.title.goalPrice')}</Th>
                       <Th className="selection">{/* t('general.selection') */}</Th>
-                      {/* <Th>{t('general.amountBought')}</Th>
-            <Th>{t('general.amountSold')}</Th>
-            <Th>{t('general.spent')}</Th>
-            <Th>{t('general.earnings')}</Th> */}
                     </Tr>
                   </Thead>
                   <Tbody>

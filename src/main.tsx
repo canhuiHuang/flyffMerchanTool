@@ -31,7 +31,7 @@ i18n
     backend: {
       loadPath: '/assests/locales/{{lng}}/translation.json',
     },
-
+    returnNull: false,
     interpolation: {
       escapeValue: false,
     },

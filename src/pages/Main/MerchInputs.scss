@@ -1,0 +1,10 @@
+.horizontal {
+  display: flex;
+  .merch-inputs {
+    display: flex;
+
+    > * {
+      margin: 12px;
+    }
+  }
+}

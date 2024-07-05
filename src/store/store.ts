@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './Slices/authSlice';
+import localDataReducer from './Slices/localDataSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    localData: localDataReducer,
   },
 });
 

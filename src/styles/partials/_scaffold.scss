@@ -53,6 +53,78 @@ a {
   }
 }
 
+// Table
+.merch-table {
+  border: 1px solid;
+  border-radius: 4px;
+
+  .chakra-editable {
+    > * {
+      min-height: 20px;
+      min-width: 40px;
+      width: 100%;
+      background-color: transparent;
+    }
+  }
+
+  td,
+  th {
+    &:first-child,
+    &:nth-child(2) {
+      border-right: 1px solid;
+    }
+  }
+
+  th {
+    &.selection {
+      max-width: 60px;
+    }
+  }
+
+  td {
+    padding: 0 20px;
+    max-width: 280px;
+
+    .chakra-editable__preview {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &.amount {
+      width: 40px;
+      max-width: 40px;
+    }
+
+    &.price {
+      max-width: 150px;
+      min-width: 150px;
+    }
+
+    &.date {
+      input {
+        width: 102px;
+        max-width: 102px;
+      }
+    }
+
+    &.selection {
+      max-width: 40px;
+      text-align: center;
+    }
+
+    &.align-center {
+      text-align: center;
+    }
+  }
+
+  .add-new {
+    margin-top: 12px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+}
+
 // Custom css properties
 .no-padding {
   padding: 0;

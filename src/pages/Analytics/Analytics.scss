@@ -1,0 +1,80 @@
+.analytics-container {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 30px 50px;
+  margin-right: 40px;
+
+  min-width: 500px;
+  min-height: 70vh;
+
+  .earnings {
+    .chakra-stat__number {
+      font-size: 36px;
+      color: rgb(128, 187, 128);
+    }
+  }
+
+  .sales {
+    display: flex;
+
+    > * {
+      margin-right: 40px;
+      margin-top: 32px;
+    }
+    .chakra-stat__number {
+      display: flex;
+      font-size: 20px;
+    }
+  }
+
+  h2 {
+    margin-bottom: 8px;
+  }
+
+  .expected-total-earnings {
+    font-size: 13px;
+  }
+
+  .gold {
+    color: rgb(240, 181, 105);
+  }
+
+  .table {
+    border: 1px solid;
+    border-radius: 5px;
+    max-height: 500px;
+    max-width: 500px;
+    overflow-y: scroll;
+    td,
+    th {
+      border-right: 1px solid;
+    }
+
+    td {
+      &.ratio {
+        &.full {
+          background-color: rgba(126, 202, 132, 0.5);
+        }
+        &.almost-full {
+          background-color: rgba(164, 204, 145, 0.5);
+        }
+        &.half {
+          background-color: rgba(215, 216, 127, 0.5);
+        }
+        &.low {
+          background-color: rgba(202, 131, 126, 0.5);
+        }
+        &.very-low {
+          background-color: rgb(238, 116, 108, 0.5);
+        }
+      }
+
+      &.bad {
+        background-color: rgba(197, 138, 133, 0.5);
+      }
+      &.good {
+        background-color: rgba(164, 204, 145, 0.5);
+      }
+    }
+  }
+}

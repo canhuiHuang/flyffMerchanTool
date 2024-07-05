@@ -1,8 +1,13 @@
 .header {
-  // background-color: rgb(156, 121, 171);
   width: 100%;
   font-weight: 500;
   // border-bottom: 1px solid #e2e8f0;
+
+  h1 {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 700;
+  }
 
   > * {
     padding: 10px 80px;
@@ -10,6 +15,8 @@
 
   img {
     display: inline-block;
+    border-radius: 5px;
+    margin: 0px 20px;
   }
 
   .color-switch {

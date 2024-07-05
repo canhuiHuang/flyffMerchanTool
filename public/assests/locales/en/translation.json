@@ -16,7 +16,25 @@
     "Confirm": "Confirm",
     "Add": "Add",
     "foundAnIssue": "Found an issue? Contact me on: ",
-    "links": "Links"
+    "links": "Links",
+    "items": "Items",
+    "spent": "Spent",
+    "sales": "Sales",
+    "earnings": "Earnings",
+    "merch": "Merch",
+    "addMerch": "Add new merch",
+    "addNewItem": "Add new item",
+    "totalSpent": "Total spent",
+    "saleOverExpectedSales": "Sale / Expected Sales",
+    "amountBought": "Bought",
+    "amountSold": "Sold",
+    "delete": "Delete",
+    "selectedItems": "{{amount}} selected",
+    "selection": "Selection",
+    "exportCSV": "Export as CSV",
+    "inventory": "Inventory",
+    "itemsDatabase": "Items Database",
+    "expectedTotalEarnings": "Expected Total Earnings"
   },
   "Language": "Language",
   "en": "English",
@@ -34,7 +52,21 @@
   "fields": {
     "placeholders": {
       "text": "Text...",
-      "title": "Title"
+      "title": "Title",
+      "description": "Description"
+    },
+    "title": {
+      "description": "Description",
+      "itemName": "Item name",
+      "price": "Price",
+      "amount": "Amount",
+      "date": "Date",
+      "goalPrice": "Goal Price",
+      "soldOverBought": "Sold / Bought",
+      "available": "Available",
+      "saleOverSpent": "Sale / Spent",
+      "earnings": "Earnings",
+      "expectedEarnings": "Expected Earnings"
     }
   },
   "Create your Account": "Create your Account",

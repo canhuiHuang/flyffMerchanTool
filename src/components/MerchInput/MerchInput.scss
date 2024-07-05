@@ -1,0 +1,14 @@
+.merch-input-container {
+  .add-new {
+    padding-right: 10px;
+    margin-top: 12px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+
+  .table {
+    overflow-y: scroll;
+    max-height: 80vh;
+  }
+}

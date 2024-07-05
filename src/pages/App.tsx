@@ -13,12 +13,7 @@ function App() {
       <Header />
       <Router>
         <Routes>
-          {/* Unprotected Routes */}
           <Route element={<Main />} path="/main/*"></Route>
-          {/* <Route element={<PrivateRoutes />}>{}</Route>
-          <Route element={<UnLoggedRoutes />}>
-            <Route element={<Auth />} path="auth/*"></Route>
-          </Route> */}
           <Route path="/*" element={<Navigate replace to="main" />} />
         </Routes>
       </Router>

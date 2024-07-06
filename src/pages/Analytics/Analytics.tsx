@@ -7,6 +7,7 @@ import {
   StatLabel,
   StatNumber,
   TableCaption,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
@@ -20,84 +21,90 @@ interface Props {
   inventory: Inventory;
 }
 
+interface InventoryItem {
+  name: string;
+  description?: string;
+  purchased: number;
+  sold: number;
+  spent: number;
+  sales: number;
+  goalPrice?: number;
+}
+
 const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
   const { t } = useTranslation();
 
-  const totalPenya = (merchArray: Array<Merch>): number => {
-    let penya: number = 0;
-    merchArray
-      .filter((merchItem) => merchItem.itemName)
-      .forEach((merchItem) => {
-        penya += Number(merchItem.price) * Number(merchItem.amount);
-      });
-    return penya;
+  const inventoryItems = (): Array<InventoryItem> => {
+    // Get unique item names
+    const uniqueItemNames = [...new Set(merchIn.map((item) => item.itemName))];
+    return uniqueItemNames.map((itemName) => generateInventoryItem(itemName));
   };
 
-  const soldAmount = (itemName?: string): number => {
-    let count: number = 0;
-    merchOut
-      .filter((merchItem) => merchItem.itemName)
-      .forEach((merchItem) => {
-        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase()) count += Number(merchItem.amount);
-      });
-    return count;
-  };
-  const boughtAmount = (itemName?: string): number => {
-    let count: number = 0;
-    merchIn
-      .filter((merchItem) => merchItem.itemName)
-      .forEach((merchItem) => {
-        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase()) count += Number(merchItem.amount);
-      });
-    return count;
-  };
-  const amountSpent = (itemName?: string): number => {
-    let penya: number = 0;
-    merchIn
-      .filter((merchItem) => merchItem.itemName)
-      .forEach((merchItem) => {
-        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase())
-          penya += Number(merchItem.amount) * Number(merchItem.price);
-      });
-    return penya;
-  };
-  const amountSold = (itemName?: string): number => {
-    let penya: number = 0;
-    merchOut
-      .filter((merchItem) => merchItem.itemName)
-      .forEach((merchItem) => {
-        if (merchItem.itemName.toUpperCase() === itemName?.toUpperCase())
-          penya += Number(merchItem.amount) * Number(merchItem.price);
-      });
-    return penya;
-  };
-  const expectedTotalSales = (itemName?: string): number => {
-    return (
-      boughtAmount(itemName) *
-      (items.filter((item) => item.name?.toUpperCase() === itemName?.toUpperCase())[0].goalPrice || 0)
+  const generateInventoryItem = (itemName: string): InventoryItem => {
+    // Count purchased
+    let purchased: number = 0,
+      spent: number = 0;
+    const sameMerchInArray = merchIn.filter((merchItem) => merchItem.itemName.toUpperCase() === itemName.toUpperCase());
+    sameMerchInArray.forEach((merch) => {
+      purchased += Number(merch.amount);
+      spent += Number(merch.amount) * Number(merch.price);
+    });
+
+    // Count sold && calculate sales
+    let sold: number = 0,
+      sales: number = 0;
+    const sameMerchOutArray = merchOut.filter(
+      (merchItem) => merchItem.itemName.toUpperCase() === itemName.toUpperCase(),
     );
+    sameMerchOutArray.forEach((merch) => {
+      sold += Number(merch.amount);
+      sales += Number(merch.amount) * Number(merch.price);
+    });
+
+    // Look item on items database
+    const databaseItem = items.filter((item) => item.name?.toUpperCase() === itemName?.toUpperCase())[0];
+
+    return {
+      name: itemName,
+      description: databaseItem?.description,
+      purchased,
+      sold,
+      spent,
+      sales,
+      goalPrice: databaseItem?.goalPrice || 0,
+    };
   };
 
-  const expectedEarnings = (itemName?: string): number => {
-    return expectedTotalSales(itemName) - amountSpent(itemName);
-  };
-
-  const expectedTotalEarnings = (): number => {
+  const totalSales = (): number => {
     let penya: number = 0;
-    items.forEach((item) => {
-      penya += Number(expectedEarnings(item.name));
+    inventoryItems().forEach((item) => {
+      penya += Number(item.sales);
     });
     return penya;
   };
 
-  const soldOverBoughtRatio = (itemName?: string): number =>
-    Math.ceil((soldAmount(itemName) * 100) / boughtAmount(itemName));
-  const saleOverSpentRatio = (itemName?: string): number =>
-    Math.ceil((amountSpent(itemName) * 100) / amountSold(itemName));
+  const totalSpent = (): number => {
+    let penya: number = 0;
+    inventoryItems().forEach((item) => {
+      penya += Number(item.spent);
+    });
+    return penya;
+  };
+
+  const expectedTotalSales = (): number => {
+    let penya: number = 0;
+    inventoryItems().forEach((item) => {
+      penya += Number(item.goalPrice) * Number(item.purchased);
+    });
+    return penya;
+  };
+
+  const totalEarnings = (): number => totalSales() - totalSpent();
+  const expectedTotalEarnings = (): number => expectedTotalSales() - totalSpent();
 
   const ratioClassification = (ratio: number): string => {
-    if (ratio >= 100) return 'full';
-    if (ratio >= 80) return 'almost-full';
+    if (ratio >= 100) return 'very-high';
+    if (ratio >= 80) return 'high';
     if (ratio >= 50) return 'half';
     if (ratio >= 20) return 'low';
     return 'very-low';
@@ -108,10 +115,10 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
       <Box className="summary earnings">
         <Stat>
           <StatLabel>{t('general.earnings')}</StatLabel>
-          <StatNumber>
-            <StatArrow type="increase" />{' '}
+          <StatNumber className={`${totalEarnings() >= 0 ? 'positive' : 'negative'}`}>
+            <StatArrow type={totalEarnings() >= 0 ? 'increase' : 'decrease'} />{' '}
             {formatValue({
-              value: (totalPenya(merchOut) - totalPenya(merchIn)).toString(),
+              value: totalEarnings().toString(),
               prefix: '$',
             })}
           </StatNumber>
@@ -127,18 +134,30 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
         </p>
       </Box>
       <Box className="summary sales">
-        <Stat>
-          <StatLabel>
-            <StatArrow type="increase" />
-            {t('general.sales')}
-          </StatLabel>
-          <StatNumber>
-            {formatValue({
-              value: totalPenya(merchOut).toString(),
-              prefix: '$',
-            })}
-          </StatNumber>
-        </Stat>
+        <Box>
+          <Stat>
+            <StatLabel>
+              <StatArrow type="increase" />
+              {t('general.sales')}
+            </StatLabel>
+            <StatNumber>
+              {formatValue({
+                value: totalSales().toString(),
+                prefix: '$',
+              })}
+            </StatNumber>
+          </Stat>
+
+          <p className="expected-total-sales">
+            {t('general.expectedSales')}:{' '}
+            <b className="gold">
+              {formatValue({
+                value: expectedTotalSales().toString(),
+                prefix: '$',
+              })}
+            </b>
+          </p>
+        </Box>
 
         <Stat>
           <StatLabel>
@@ -147,7 +166,7 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
           </StatLabel>
           <StatNumber>
             {formatValue({
-              value: totalPenya(merchIn).toString(),
+              value: totalSpent().toString(),
               prefix: '$',
             })}
           </StatNumber>
@@ -161,62 +180,91 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
             <Thead>
               <Tr>
                 <Th>{t('fields.title.itemName')}</Th>
-                <Th>{t('fields.title.description')}</Th>
+                {/* <Th>{t('fields.title.description')}</Th> */}
                 <Th>{t('fields.title.goalPrice')}</Th>
-                <Th>{t('fields.title.soldOverBought')}</Th>
+                <Th>{t('fields.title.soldOverPurchased')}</Th>
                 <Th>{t('fields.title.available')}</Th>
                 <Th>{t('fields.title.saleOverSpent')}</Th>
+                <Th>{t('fields.title.expectedSales')}</Th>
                 <Th>{t('fields.title.earnings')}</Th>
                 <Th>{t('fields.title.expectedEarnings')}</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {!!items.length &&
-                items
-                  .filter((item) => item.name)
-                  .map((item, idx) => (
-                    <Tr key={idx}>
-                      <Td>{item.name}</Td>
-                      <Td>{item.description}</Td>
-                      <Td>{formatValue({ value: item.goalPrice?.toString(), prefix: '$' })}</Td>
-                      <Td
-                        className={`align-center availability-ratio ratio ${ratioClassification(
-                          soldOverBoughtRatio(item.name),
-                        )}`}
-                      >
-                        {soldAmount(item.name)} / {boughtAmount(item.name)} ({soldOverBoughtRatio(item.name)}%)
-                      </Td>
-                      <Td>{boughtAmount(item.name) - soldAmount(item.name)}</Td>
-                      <Td
-                        className={`align-center earnings-ratio ratio ${ratioClassification(
-                          saleOverSpentRatio(item.name),
-                        )}`}
-                      >
-                        {formatValue({ value: amountSold(item.name).toString(), prefix: '$' })} /{' '}
-                        {formatValue({ value: amountSpent(item.name).toString(), prefix: '$' })} (
-                        {saleOverSpentRatio(item.name)}%)
-                      </Td>
-                      <Td className={`${amountSold(item.name) - amountSpent(item.name) > 0 ? 'good' : 'bad'}`}>
-                        {formatValue({
-                          value: (amountSold(item.name) - amountSpent(item.name)).toString(),
-                          prefix: '$',
-                        })}{' '}
-                        {amountSold(item.name) - amountSpent(item.name) - expectedEarnings(item.name) >= 0 && '🎉'}
-                      </Td>
-                      <Td
-                        className={`${
-                          amountSold(item.name) - amountSpent(item.name) - expectedEarnings(item.name) >= 0
-                            ? 'good'
-                            : ''
-                        }`}
-                      >
-                        {formatValue({
-                          value: expectedEarnings(item.name).toString(),
-                          prefix: '$',
-                        })}
-                      </Td>
-                    </Tr>
-                  ))}
+              {!!inventoryItems().length &&
+                inventoryItems().map((item, idx) => (
+                  <Tr key={idx}>
+                    {/* Name */}
+                    <Td>{item.name}</Td>
+
+                    {/* Description */}
+                    {/* <Td>{item.description}</Td> */}
+
+                    {/* Goal Price */}
+                    <Td>{formatValue({ value: item.goalPrice?.toString(), prefix: '$' })}</Td>
+
+                    {/* Sold / Purchased */}
+                    <Td
+                      className={`align-center availability-ratio ratio ${ratioClassification(
+                        Math.ceil((item.sold / item.purchased) * 100),
+                      )}`}
+                    >
+                      {item.sold} / {item.purchased} ({Math.ceil((item.sold / item.purchased) * 100)}%)
+                    </Td>
+
+                    {/* Available */}
+                    <Td>{item.purchased - item.sold}</Td>
+
+                    {/* Sales / Spent */}
+                    <Td
+                      className={`align-center earnings-ratio ratio ${ratioClassification(
+                        Math.ceil((item.sales / item.spent) * 100),
+                      )}`}
+                    >
+                      {formatValue({ value: item.sales.toString(), prefix: '$' })} /{' '}
+                      {formatValue({ value: item.spent.toString(), prefix: '$' })} (
+                      {Math.ceil((item.sales / item.spent) * 100)}%)
+                    </Td>
+
+                    {/* Expected Sales */}
+                    <Td>{formatValue({ value: (item.purchased * (item.goalPrice || 0)).toString(), prefix: '$' })} </Td>
+
+                    {/* Earnings */}
+                    <Td className={`${item.sales - item.spent > 0 ? 'good' : 'bad'}`}>
+                      {formatValue({
+                        value: (item.sales - item.spent).toString(),
+                        prefix: '$',
+                      })}{' '}
+                      {item.sales - item.spent - item.purchased * (item.goalPrice || 0) >= 0 && '🎉'}
+                    </Td>
+
+                    {/* Expected Earnings */}
+                    <Td
+                      className={`${item.purchased * (item.goalPrice || 0) - item.spent > 0 ? 'good' : ''} ${
+                        item.purchased * (item.goalPrice || 0) - item.spent < 0 ? 'error' : ''
+                      }`}
+                    >
+                      {item.purchased * (item.goalPrice || 0) - item.spent >= 0 && (
+                        <span>
+                          {' '}
+                          {formatValue({
+                            value: (item.purchased * (item.goalPrice || 0) - item.spent).toString(),
+                            prefix: '$',
+                          })}
+                        </span>
+                      )}
+
+                      {item.purchased * (item.goalPrice || 0) - item.spent < 0 && (
+                        <Tooltip label={t('general.unexpectedEarningsMessage')}>
+                          {formatValue({
+                            value: (item.purchased * (item.goalPrice || 0) - item.spent).toString(),
+                            prefix: '$',
+                          })}
+                        </Tooltip>
+                      )}
+                    </Td>
+                  </Tr>
+                ))}
             </Tbody>
           </Table>
         </TableContainer>

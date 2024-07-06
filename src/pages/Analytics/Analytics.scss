@@ -10,7 +10,13 @@
   .earnings {
     .chakra-stat__number {
       font-size: 36px;
-      color: rgb(128, 187, 128);
+
+      &.positive {
+        color: rgb(128, 187, 128);
+      }
+      &.negative {
+        color: rgb(236, 110, 110);
+      }
     }
   }
 
@@ -74,6 +80,9 @@
       }
       &.good {
         background-color: rgba(164, 204, 145, 0.5);
+      }
+      &.error {
+        background-color: rgba(250, 116, 64, 0.5);
       }
     }
   }

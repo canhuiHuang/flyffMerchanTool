@@ -52,7 +52,9 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           </Stack>
         </Box>
       </Collapse>
-      <Box className="add-new">
+      <Box className="header-space">
+        <h2>{type === 'in' ? t('general.merchIn') : t('general.merchOut')}</h2>
+
         <Button colorScheme="blue" size="sm" variant="outline" mb="2" onClick={() => addMerch()}>
           {t('general.addMerch')}
         </Button>

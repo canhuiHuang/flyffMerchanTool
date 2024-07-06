@@ -38,7 +38,9 @@
     "expectedTotalEarnings": "Expected Total Earnings",
     "fixData": "Fix data",
     "expectedSales": "Expected Sales",
-    "unexpectedEarningsMessage": "Item either doesn't exist in items database or doesn't have a goal price. Register the item in items database for accurate calculations."
+    "unexpectedEarningsMessage": "Item either doesn't exist in items database or doesn't have a goal price. Register the item in items database for accurate calculations.",
+    "merchIn": "Merch in",
+    "merchOut": "Merch out"
   },
   "Language": "Language",
   "en": "English",

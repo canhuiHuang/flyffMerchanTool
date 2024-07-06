@@ -1,10 +1,15 @@
 .merch-input-container {
-  .add-new {
+  .header-space {
     padding-right: 10px;
     margin-top: 12px;
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+
+    h2 {
+      margin-left: 20px;
+      font-weight: 700;
+    }
   }
 
   .table {

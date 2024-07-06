@@ -67,6 +67,12 @@ a {
     }
   }
 
+  tr {
+    &.no-id {
+      background-color: rgba(230, 78, 78, 0.1);
+    }
+  }
+
   td,
   th {
     &:first-child,

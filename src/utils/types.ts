@@ -1,4 +1,5 @@
 export interface Merch {
+  id: string;
   description: any;
   itemName: any;
   price: any;
@@ -7,6 +8,7 @@ export interface Merch {
 }
 
 export interface Item {
+  id: string;
   name?: string;
   description?: string;
   goalPrice?: number;

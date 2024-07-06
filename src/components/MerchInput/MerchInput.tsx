@@ -52,6 +52,11 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           </Stack>
         </Box>
       </Collapse>
+      <Box className="add-new">
+        <Button colorScheme="blue" size="sm" variant="outline" mb="2" onClick={() => addMerch()}>
+          {t('general.addMerch')}
+        </Button>
+      </Box>
       <TableContainer className="merch-table table">
         <Table size="sm" variant="simple">
           <Thead>
@@ -68,7 +73,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           </Thead>
           <Tbody>
             {merch.map((item: Merch, idx: number) => (
-              <Tr key={idx}>
+              <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'}`}>
                 <Td>
                   <Editable defaultValue={item.description || undefined}>
                     <EditablePreview />
@@ -154,11 +159,6 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           </Tbody>
         </Table>
       </TableContainer>
-      <Box className="add-new">
-        <Button colorScheme="blue" size="sm" variant="outline" onClick={() => addMerch()}>
-          {t('general.addMerch')}
-        </Button>
-      </Box>
     </Box>
   );
 };

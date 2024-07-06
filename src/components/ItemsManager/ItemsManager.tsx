@@ -64,7 +64,11 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                 </Stack>
               </Box>
             </Collapse>
-
+            <Box className="add-new" mt={3}>
+              <Button colorScheme="blue" size="sm" mb="2" variant="outline" onClick={() => addItem()}>
+                {t('general.addNewItem')}
+              </Button>
+            </Box>
             {!!items.length && (
               <TableContainer className="merch-table table">
                 <Table size="sm">
@@ -78,7 +82,7 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                   </Thead>
                   <Tbody>
                     {items.map((item, idx) => (
-                      <Tr key={idx}>
+                      <Tr key={idx} className={`${item.id ? 'has-id' : 'no-id'}`}>
                         <Td>
                           <Editable defaultValue={item.name || undefined}>
                             <EditablePreview />
@@ -123,12 +127,6 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                 </Table>
               </TableContainer>
             )}
-
-            <Box className="add-new" mt={3}>
-              <Button colorScheme="blue" size="sm" variant="outline" onClick={() => addItem()}>
-                {t('general.addNewItem')}
-              </Button>
-            </Box>
           </Box>
         </Box>
       </Collapse>

@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Spacer } from '@chakra-ui/react';
 import MerchInput from '../../components/MerchInput/MerchInput';
 import './Main.scss';
 import './MerchInputs.scss';
@@ -10,7 +10,6 @@ import { RootState } from '../../store/store';
 import ItemsManager from '../../components/ItemsManager/ItemsManager';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Analytics from '../Analytics/Analytics';
-import { Inventory, Items, Merch } from '../../utils/types';
 
 type keyName = 'description' | 'itemName' | 'price' | 'amount' | 'date' | 'goalPrice';
 type MerchType = 'merchIn' | 'merchOut' | 'items';
@@ -37,6 +36,28 @@ const Main = () => {
     dispatch(saveLocalData(newInventory));
   };
 
+  const fixData = () => {
+    let newInventory = { ...inventory };
+
+    // Assign id to ALL merchItems
+    Object.entries(inventory).forEach(([merchType, merchArray]) => {
+      const newMerchArray = merchArray.map((item) => {
+        if (!item.id)
+          return {
+            ...item,
+            id: `${Math.ceil(Math.random() * 10000000)}T${Date.now()}`,
+          };
+
+        return item;
+      });
+
+      newInventory = { ...newInventory, [merchType]: newMerchArray };
+    });
+
+    setInventory(newInventory);
+    dispatch(saveLocalData(newInventory));
+  };
+
   const updateMerch = (type: MerchType, index: number, newVal: any, keyName: keyName) => {
     const newMerchArray = [...inventory[type]];
     newMerchArray[index] = { ...newMerchArray[index], [keyName]: newVal };
@@ -45,17 +66,19 @@ const Main = () => {
 
   const addMerch = (type: MerchType) => {
     const d = new Date();
+    const dateString = [d.getFullYear(), ('0' + (d.getMonth() + 1)).slice(-2), ('0' + d.getDate()).slice(-2)].join('-');
 
     const newMerchArray = [
-      ...inventory[type],
       {
+        id: `${Math.ceil(Math.random() * 10000000)}T${Date.now()}`,
         description: null,
         itemName: null,
         price: null,
         amount: null,
-        date: [d.getFullYear(), ('0' + (d.getMonth() + 1)).slice(-2), ('0' + d.getDate()).slice(-2)].join('-'),
+        date: dateString,
         goalPrice: null,
       },
+      ...inventory[type],
     ];
 
     save(type, newMerchArray);
@@ -107,24 +130,32 @@ const Main = () => {
 
   return (
     <Flex className="main-container">
-      <Button className="btn btn-csv" variant="solid" size="sm" mt="1rem">
-        <CSVLink
-          data={[
-            ...inventory.merchIn,
-            ...inventory.merchOut.map((merchItem) => ({
-              outDescription: merchItem.description,
-              outItemName: merchItem.itemName,
-              outPrice: merchItem.price,
-              outAmount: merchItem.amount,
-              outDate: merchItem.date,
-            })),
-          ]}
-          headers={csvHeaders}
-          filename="save"
-        >
-          {t('general.exportCSV')} 📝
-        </CSVLink>
-      </Button>
+      <HStack>
+        <Button className="btn btn-csv" variant="solid" size="sm" mt="1rem">
+          <CSVLink
+            data={[
+              ...inventory.merchIn,
+              ...inventory.merchOut.map((merchItem) => ({
+                outDescription: merchItem.description,
+                outItemName: merchItem.itemName,
+                outPrice: merchItem.price,
+                outAmount: merchItem.amount,
+                outDate: merchItem.date,
+              })),
+            ]}
+            headers={csvHeaders}
+            filename="save"
+          >
+            {t('general.exportCSV')} 📝
+          </CSVLink>
+        </Button>
+
+        <Spacer />
+
+        <Button className="btn btn-fix" colorScheme="red" variant="solid" size="sm" mt="1rem" onClick={fixData}>
+          {t('general.fixData')}
+        </Button>
+      </HStack>
 
       <div className="horizontal">
         <Box className="merch-inputs">

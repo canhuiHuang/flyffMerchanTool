@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
 import MerchInput from '../../components/MerchInput/MerchInput';
 import './Main.scss';
 import './MerchInputs.scss';
@@ -10,6 +10,7 @@ import { RootState } from '../../store/store';
 import ItemsManager from '../../components/ItemsManager/ItemsManager';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Analytics from '../Analytics/Analytics';
+import Confirm from '../../components/Modals/Confirm/Confirm';
 
 type keyName = 'description' | 'itemName' | 'price' | 'amount' | 'date' | 'goalPrice';
 type MerchType = 'merchIn' | 'merchOut' | 'items';
@@ -22,6 +23,7 @@ interface Item {
 const Main = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const localData = useSelector((state: RootState) => state.localData);
 
   const [inventory, setInventory] = useState({
@@ -52,6 +54,9 @@ const Main = () => {
       });
 
       newInventory = { ...newInventory, [merchType]: newMerchArray };
+
+      // Close modal
+      onClose();
     });
 
     setInventory(newInventory);
@@ -130,6 +135,8 @@ const Main = () => {
 
   return (
     <Flex className="main-container">
+      <Confirm onConfirm={fixData} isOpen={isOpen} onClose={onClose} />
+
       <HStack>
         <Button className="btn btn-csv" variant="solid" size="sm" mt="1rem">
           <CSVLink
@@ -152,7 +159,7 @@ const Main = () => {
 
         <Spacer />
 
-        <Button className="btn btn-fix" colorScheme="red" variant="solid" size="sm" mt="1rem" onClick={fixData}>
+        <Button className="btn btn-fix" colorScheme="red" variant="solid" size="sm" mt="1rem" onClick={onOpen}>
           {t('general.fixData')}
         </Button>
       </HStack>

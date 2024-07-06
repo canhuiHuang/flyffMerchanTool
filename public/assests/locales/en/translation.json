@@ -1,20 +1,21 @@
 {
   "general": {
-    "English": "English",
-    "Japanese": "Japanese",
-    "Chinese": "Chinese",
-    "Spanish": "Spanish",
-    "Languages": "Languages",
-    "Yes": "Yes",
-    "No": "No",
-    "Register": "Register",
-    "Login": "Login",
-    "Email": "Email",
-    "Password": "Password",
-    "Change": "Change",
-    "New": "New",
-    "Confirm": "Confirm",
-    "Add": "Add",
+    "english": "English",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "spanish": "Spanish",
+    "languages": "Languages",
+    "yes": "Yes",
+    "no": "No",
+    "register": "Register",
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "change": "Change",
+    "new": "New",
+    "confirm": "Confirm",
+    "close": "Close",
+    "add": "Add",
     "foundAnIssue": "Found an issue? Contact me on: ",
     "links": "Links",
     "items": "Items",
@@ -68,6 +69,12 @@
       "saleOverSpent": "Sales / Spent",
       "earnings": "Earnings",
       "expectedEarnings": "Expected Earnings"
+    }
+  },
+  "components": {
+    "confirmModal": {
+      "title": "Confirm",
+      "defaultBody": "Are you sure?"
     }
   },
   "Create your Account": "Create your Account",

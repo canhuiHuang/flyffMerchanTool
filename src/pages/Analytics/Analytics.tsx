@@ -188,8 +188,8 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
                 <Th>{t('fields.title.available')}</Th>
                 <Th>{t('fields.title.saleOverSpent')}</Th>
                 <Th>{t('fields.title.expectedSales')}</Th>
-                <Th>{t('fields.title.earnings')}</Th>
                 <Th>{t('fields.title.expectedEarnings')}</Th>
+                <Th>{t('fields.title.earnings')}</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -231,21 +231,8 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
                     {/* Expected Sales */}
                     <Td>{formatValue({ value: (item.purchased * (item.goalPrice || 0)).toString(), prefix: '$' })} </Td>
 
-                    {/* Earnings */}
-                    <Td className={`${item.sales - item.spent > 0 ? 'good' : 'bad'}`}>
-                      {formatValue({
-                        value: (item.sales - item.spent).toString(),
-                        prefix: '$',
-                      })}{' '}
-                      {item.sales - item.spent - item.purchased * (item.goalPrice || 0) >= 0 && '🎉'}
-                    </Td>
-
                     {/* Expected Earnings */}
-                    <Td
-                      className={`${item.purchased * (item.goalPrice || 0) - item.spent > 0 ? 'good' : ''} ${
-                        item.purchased * (item.goalPrice || 0) - item.spent < 0 ? 'error' : ''
-                      }`}
-                    >
+                    <Td className={`${item.purchased * (item.goalPrice || 0) - item.spent < 0 ? 'error' : ''}`}>
                       {item.purchased * (item.goalPrice || 0) - item.spent >= 0 && (
                         <span>
                           {' '}
@@ -264,6 +251,15 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
                           })}
                         </Tooltip>
                       )}
+                    </Td>
+
+                    {/* Earnings */}
+                    <Td className={`${item.sales - item.spent > 0 ? 'good' : 'bad'}`}>
+                      {formatValue({
+                        value: (item.sales - item.spent).toString(),
+                        prefix: '$',
+                      })}{' '}
+                      {item.sales - item.spent - item.purchased * (item.goalPrice || 0) >= 0 && '🎉'}
                     </Td>
                   </Tr>
                 ))}

@@ -44,7 +44,9 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
     // Count purchased
     let purchased: number = 0,
       spent: number = 0;
-    const sameMerchInArray = merchIn.filter((merchItem) => merchItem.itemName.toUpperCase() === itemName.toUpperCase());
+    const sameMerchInArray = merchIn.filter(
+      (merchItem) => merchItem.itemName && merchItem.itemName?.toUpperCase() === itemName?.toUpperCase(),
+    );
     sameMerchInArray.forEach((merch) => {
       purchased += Number(merch.amount);
       spent += Number(merch.amount) * Number(merch.price);
@@ -54,7 +56,7 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
     let sold: number = 0,
       sales: number = 0;
     const sameMerchOutArray = merchOut.filter(
-      (merchItem) => merchItem.itemName.toUpperCase() === itemName.toUpperCase(),
+      (merchItem) => merchItem.itemName && merchItem.itemName?.toUpperCase() === itemName?.toUpperCase(),
     );
     sameMerchOutArray.forEach((merch) => {
       sold += Number(merch.amount);
@@ -62,7 +64,7 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
     });
 
     // Look item on items database
-    const databaseItem = items.filter((item) => item.name?.toUpperCase() === itemName?.toUpperCase())[0];
+    const databaseItem = items.filter((item) => item.name && item.name?.toUpperCase() === itemName?.toUpperCase())[0];
 
     return {
       name: itemName,

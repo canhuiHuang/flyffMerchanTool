@@ -89,10 +89,10 @@ const Main = () => {
     save(type, newMerchArray);
   };
 
-  const deleteMerch = (type: MerchType, selected: Array<number>) => {
+  const deleteMerch = (type: MerchType, selected: Array<string>) => {
     // Add confirmation modal later //
 
-    const newMerchArray = [...inventory[type]].filter((item, idx) => !selected.includes(idx));
+    const newMerchArray = [...inventory[type]].filter((item) => !selected.includes(item.id));
     save(type, newMerchArray);
   };
 
@@ -106,9 +106,9 @@ const Main = () => {
     updateMerch('merchOut', index, newVal, keyName);
   const updateItem = (index: number, newVal: any, keyName: keyName) => updateMerch('items', index, newVal, keyName);
 
-  const deleteMerchIn = (selected: Array<number>) => deleteMerch('merchIn', selected);
-  const deleteMerchOut = (selected: Array<number>) => deleteMerch('merchOut', selected);
-  const deleteItems = (selected: Array<number>) => deleteMerch('items', selected);
+  const deleteMerchIn = (selected: Array<string>) => deleteMerch('merchIn', selected);
+  const deleteMerchOut = (selected: Array<string>) => deleteMerch('merchOut', selected);
+  const deleteItems = (selected: Array<string>) => deleteMerch('items', selected);
 
   // useEffect(() => {
   //   const delayDebounceFn = setTimeout(() => {

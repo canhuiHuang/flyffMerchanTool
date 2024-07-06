@@ -21,12 +21,12 @@ interface MerchInputProps {
 const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: MerchInputProps) => {
   const { t } = useTranslation();
 
-  const [selected, setSelected] = useState<Array<number>>([]);
-  const onSelectHandle = (newVal: boolean, merchIndex: number) => {
+  const [selected, setSelected] = useState<Array<string>>([]);
+  const onSelectHandle = (newVal: boolean, itemId: string) => {
     if (newVal) {
-      if (!selected.includes(merchIndex)) setSelected([...selected, merchIndex]);
+      if (!selected.includes(itemId)) setSelected([...selected, itemId]);
     } else {
-      setSelected(selected.filter((merch) => merch !== merchIndex));
+      setSelected(selected.filter((selectedId) => selectedId !== itemId));
     }
   };
 
@@ -149,9 +149,9 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                 )}
                 <Td className="selection">
                   <Checkbox
-                    onChange={(e) => onSelectHandle(e.target.checked, idx)}
+                    onChange={(e) => onSelectHandle(e.target.checked, item.id)}
                     colorScheme="red"
-                    isChecked={selected.includes(idx)}
+                    isChecked={selected.includes(item.id)}
                   ></Checkbox>
                 </Td>
               </Tr>

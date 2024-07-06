@@ -31,12 +31,12 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
   const { t } = useTranslation();
 
   const { isOpen, onToggle } = useDisclosure();
-  const [selected, setSelected] = useState<Array<number>>([]);
-  const onSelectHandle = (newVal: boolean, itemIndex: number) => {
+  const [selected, setSelected] = useState<Array<string>>([]);
+  const onSelectHandle = (newVal: boolean, itemId: string) => {
     if (newVal) {
-      if (!selected.includes(itemIndex)) setSelected([...selected, itemIndex]);
+      if (!selected.includes(itemId)) setSelected([...selected, itemId]);
     } else {
-      setSelected(selected.filter((item) => item !== itemIndex));
+      setSelected(selected.filter((selectedId) => selectedId !== itemId));
     }
   };
 
@@ -82,7 +82,7 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                   </Thead>
                   <Tbody>
                     {items.map((item, idx) => (
-                      <Tr key={idx} className={`${item.id ? 'has-id' : 'no-id'}`}>
+                      <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'}`}>
                         <Td>
                           <Editable defaultValue={item.name || undefined}>
                             <EditablePreview />
@@ -116,9 +116,9 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                         </Td>
                         <Td className="selection">
                           <Checkbox
-                            onChange={(e) => onSelectHandle(e.target.checked, idx)}
+                            onChange={(e) => onSelectHandle(e.target.checked, item.id)}
                             colorScheme="red"
-                            checked={selected.includes(idx)}
+                            checked={selected.includes(item.id)}
                           ></Checkbox>
                         </Td>
                       </Tr>

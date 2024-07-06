@@ -259,7 +259,7 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
                         value: (item.sales - item.spent).toString(),
                         prefix: '$',
                       })}{' '}
-                      {item.sales - item.spent - item.purchased * (item.goalPrice || 0) >= 0 && '🎉'}
+                      {item.sales - item.spent - (item.purchased * (item.goalPrice || 0) - item.spent) >= 0 && '🎉'}
                     </Td>
                   </Tr>
                 ))}

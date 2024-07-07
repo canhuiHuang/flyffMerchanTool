@@ -208,7 +208,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                     {/* Sold */}
                     <Td
                       className={`align-center availability-ratio ratio ${ratioClassification(
-                        getRatio(item.sold / item.purchased),
+                        getRatio(item.sold / (item.freeMerchAmount + item.purchased - item.sold)),
                       )}`}
                     >
                       {item.sold} ({getRatio(item.sold / (item.freeMerchAmount + item.purchased - item.sold))})

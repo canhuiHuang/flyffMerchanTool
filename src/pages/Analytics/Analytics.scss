@@ -7,7 +7,7 @@
   min-width: 500px;
   min-height: 70vh;
 
-  .earnings-row {
+  .profit-row {
     display: flex;
     gap: 200px;
 
@@ -42,7 +42,7 @@
     }
   }
 
-  .earnings {
+  .profit {
     .chakra-stat__number {
       font-size: 36px;
 
@@ -59,8 +59,8 @@
     margin-bottom: 8px;
   }
 
-  .expected-total-earnings,
-  .estimated-earnings-from-free-merch {
+  .expected-total-profit,
+  .estimated-profit-from-free-merch {
     margin-bottom: 4px;
     font-size: 13px;
   }

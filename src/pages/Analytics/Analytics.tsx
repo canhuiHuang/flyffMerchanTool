@@ -49,17 +49,16 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
     return penya;
   };
 
-  const estimatedTotalEarningsFromFreeMerch = (): number => {
+  const estimatedTotalProfitFromFreeMerch = (): number => {
     let penya: number = 0;
     inventoryItems.forEach((item) => {
-      penya += computed.estimatedEarningsFromFreeMerch(item);
+      penya += computed.estimatedProfitFromFreeMerch(item);
     });
     return penya;
   };
 
   const ratioClassification = (ratio: string): string => {
     const ratioNumber = Number(ratio.replace('%', ''));
-    console.log(ratioNumber, ratio);
     if (ratioNumber >= 100 || ratio === '∞') return 'very-high';
     if (ratioNumber >= 80) return 'high';
     if (ratioNumber >= 50) return 'half';
@@ -74,10 +73,10 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
 
   const computed = {
     expectedSales: (item: InventoryItem) => (item.purchased + item.freeMerchAmount) * (item.goalPrice || 0),
-    expectedEarnings: (item: InventoryItem) => computed.expectedSales(item) - item.spent,
-    expectedTotalEarnings: (): number => expectedTotalSales() - totalSpent(),
-    totalEarnings: (): number => totalSales() - totalSpent(),
-    estimatedEarningsFromFreeMerch: (item: InventoryItem): number => {
+    expectedProfit: (item: InventoryItem) => computed.expectedSales(item) - item.spent,
+    expectedTotalProfit: (): number => expectedTotalSales() - totalSpent(),
+    totalProfit: (): number => totalSales() - totalSpent(),
+    estimatedProfitFromFreeMerch: (item: InventoryItem): number => {
       if (Number(item.freeMerchAmount) > Number(item.sold)) {
         return Number(item.goalPrice) * Number(item.sold);
       }
@@ -87,34 +86,34 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
 
   return (
     <Box className="analytics-container">
-      <Box className="earnings-row">
-        {/* Earnings */}
-        <Box className="summary earnings">
+      <Box className="profit-row">
+        {/* profit */}
+        <Box className="summary profit">
           <Stat>
-            <StatLabel>{t('general.earnings')}</StatLabel>
-            <StatNumber className={`${computed.totalEarnings() >= 0 ? 'positive' : 'negative'}`}>
-              <StatArrow type={computed.totalEarnings() >= 0 ? 'increase' : 'decrease'} />{' '}
+            <StatLabel>{t('general.profit')}</StatLabel>
+            <StatNumber className={`${computed.totalProfit() >= 0 ? 'positive' : 'negative'}`}>
+              <StatArrow type={computed.totalProfit() >= 0 ? 'increase' : 'decrease'} />{' '}
               {formatValue({
-                value: computed.totalEarnings().toString(),
+                value: computed.totalProfit().toString(),
                 prefix: '$',
               })}
             </StatNumber>
           </Stat>
 
-          <p className="estimated-earnings-from-free-merch">
-            {t('components.analytics.estimatedEarningsFromFreeMerch')}:{' '}
+          <p className="estimated-profit-from-free-merch">
+            {t('components.analytics.estimatedProfitFromFreeMerch')}:{' '}
             <b className="positive">
               {formatValue({
-                value: estimatedTotalEarningsFromFreeMerch().toString(),
+                value: estimatedTotalProfitFromFreeMerch().toString(),
                 prefix: '$',
               })}
             </b>
           </p>
-          <p className="expected-total-earnings">
-            {t('components.analytics.expectedTotalEarnings')}:{' '}
+          <p className="expected-total-profit">
+            {t('components.analytics.expectedTotalProfit')}:{' '}
             <b className="gold">
               {formatValue({
-                value: computed.expectedTotalEarnings().toString(),
+                value: computed.expectedTotalProfit().toString(),
                 prefix: '$',
               })}
             </b>
@@ -180,8 +179,8 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                 <Th>{t('components.analytics.sold')}</Th>
                 <Th>{t('fields.title.saleOverSpent')}</Th>
                 <Th>{t('fields.title.expectedSales')}</Th>
-                <Th>{t('fields.title.expectedEarnings')}</Th>
-                <Th>{t('fields.title.earnings')}</Th>
+                <Th>{t('fields.title.expectedProfit')}</Th>
+                <Th>{t('fields.title.profit')}</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -217,7 +216,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
 
                     {/* Sales / Spent */}
                     <Td
-                      className={`align-center earnings-ratio ratio ${ratioClassification(
+                      className={`align-center profit-ratio ratio ${ratioClassification(
                         getRatio(item.sales / item.spent),
                       )}`}
                     >
@@ -246,41 +245,39 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                       )}
                     </Td>
 
-                    {/* Expected Earnings */}
-                    <Td className={`${computed.expectedEarnings(item) < 0 ? 'error' : ''}`}>
-                      {computed.expectedEarnings(item) > 0 && (
+                    {/* Expected Profit */}
+                    <Td className={`${computed.expectedProfit(item) < 0 ? 'error' : ''}`}>
+                      {computed.expectedProfit(item) > 0 && (
                         <span>
                           {formatValue({
-                            value: computed.expectedEarnings(item).toString(),
+                            value: computed.expectedProfit(item).toString(),
                             prefix: '$',
                           })}
                         </span>
                       )}
 
-                      {computed.expectedEarnings(item) <= 0 && (
+                      {computed.expectedProfit(item) <= 0 && (
                         <Tooltip
                           hasArrow
-                          label={t('components.analytics.unexpectedEarningsMessage', { name: item.name })}
+                          label={t('components.analytics.unexpectedProfitMessage', { name: item.name })}
                         >
                           {formatValue({
-                            value: computed.expectedEarnings(item).toString(),
+                            value: computed.expectedProfit(item).toString(),
                             prefix: '$',
                           })}
                         </Tooltip>
                       )}
                     </Td>
 
-                    {/* Earnings */}
+                    {/* Profit */}
                     <Td className={`${item.sales - item.spent > 0 ? 'good' : 'bad'}`}>
                       {formatValue({
                         value: (item.sales - item.spent).toString(),
                         prefix: '$',
                       })}{' '}
-                      {item.sales - item.spent > 0 &&
-                        item.sales - item.spent >= computed.expectedEarnings(item) &&
-                        '🎉'}
-                      {/* {item.sales - item.spent > 0 && item.sales - item.spent >= computed.expectedEarnings(item) && (
-                        <Tooltip hasArrow label={t('components.analytics.surpassedExpectedEarnings')}>🎉</Tooltip>
+                      {item.sales - item.spent > 0 && item.sales - item.spent >= computed.expectedProfit(item) && '🎉'}
+                      {/* {item.sales - item.spent > 0 && item.sales - item.spent >= computed.expectedProfit(item) && (
+                        <Tooltip hasArrow label={t('components.analytics.surpassedExpectedProfit')}>🎉</Tooltip>
                       )} */}
                     </Td>
                   </Tr>

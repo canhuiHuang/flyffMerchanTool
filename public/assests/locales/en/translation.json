@@ -22,6 +22,7 @@
     "spent": "Spent",
     "sales": "Sales",
     "earnings": "Earnings",
+    "profit": "Profit",
     "merch": "Merch",
     "addMerch": "Add new merch",
     "addNewItem": "Add new item",
@@ -70,7 +71,8 @@
       "available": "Available",
       "saleOverSpent": "Sales / Spent",
       "earnings": "Earnings",
-      "expectedEarnings": "Expected Earnings",
+      "profit": "Profit",
+      "expectedProfit": "Expected Profit",
       "expectedSales": "Expected Sales"
     }
   },
@@ -83,14 +85,14 @@
       "free": "Free",
       "purchased": "Purchased",
       "sold": "Sold",
-      "totalEarnings": "Total Earnings",
-      "estimatedEarningsFromFreeMerch": "Estimated free Merch Earnings",
-      "surpassedExpectedEarnings": "Expected earnings surpassed!",
-      "expectedTotalEarnings": "Expected Total Earnings",
+      "totalProfit": "Total Profit",
+      "estimatedProfitFromFreeMerch": "Estimated free Merch Profit",
+      "surpassedExpectedProfit": "Expected profit surpassed!",
+      "expectedTotalProfit": "Expected Total Profit",
       "freeMerchAmount": "Free Merch Amount",
-      "unexpectedEarningsMessage": "Register the item {{name}} in items database for accurate calculations.",
+      "unexpectedProfitMessage": "Register the item {{name}} in items database for accurate calculations.",
       "unexpectedSalesMessage": "Register the item's goal price in items database for accurate calculations.",
-      "estimatedEarningsFromFreeMerchFormula": "∑ (item.goalPrice×item.freeItemsSold)"
+      "estimatedProfitFromFreeMerchFormula": "∑ (item.goalPrice×item.freeItemsSold)"
     },
     "header": {
       "storageUsed": "Storage used: {{amount}} KB",

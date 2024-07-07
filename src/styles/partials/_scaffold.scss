@@ -71,11 +71,6 @@ a {
     &.no-id {
       background-color: rgba(230, 78, 78, 0.1);
     }
-
-    &:hover {
-      transition: all ease-in-out 0.01s;
-      background-color: rgba(245, 207, 39, 0.2);
-    }
   }
 
   td,
@@ -138,6 +133,17 @@ a {
     width: 100%;
     display: flex;
     justify-content: end;
+  }
+}
+
+.table {
+  tr {
+    &.highlightable {
+      &:hover {
+        transition: all ease-in-out 0.01s;
+        background-color: rgba(245, 207, 39, 0.2);
+      }
+    }
   }
 }
 

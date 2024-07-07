@@ -82,7 +82,7 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                   </Thead>
                   <Tbody>
                     {items.map((item, idx) => (
-                      <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'}`}>
+                      <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'} highlightable`}>
                         <Td>
                           <Editable defaultValue={item.name || undefined}>
                             <EditablePreview />

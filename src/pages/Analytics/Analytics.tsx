@@ -195,7 +195,7 @@ const Analytics = ({ inventory: { merchIn, merchOut, items } }: Props) => {
             <Tbody>
               {!!inventoryItems().length &&
                 inventoryItems().map((item, idx) => (
-                  <Tr key={idx}>
+                  <Tr key={idx} className="highlightable">
                     {/* Name */}
                     <Td>{item.name}</Td>
 

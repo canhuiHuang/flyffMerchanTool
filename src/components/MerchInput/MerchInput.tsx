@@ -75,7 +75,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           </Thead>
           <Tbody>
             {merch.map((item: Merch, idx: number) => (
-              <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'}`}>
+              <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'} highlightable`}>
                 <Td>
                   <Editable defaultValue={item.description || undefined}>
                     <EditablePreview />

@@ -1,9 +1,11 @@
 import './Header.scss';
-import { Stack, HStack, Box, Avatar, Image, Flex, Spacer, Icon, Switch, color } from '@chakra-ui/react';
+import { Stack, HStack, Box, Avatar, Image, Flex, Spacer, Icon, Switch, color, Tooltip } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { SunIcon, MoonIcon, InfoOutlineIcon } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
+  const { t } = useTranslation();
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('#454546', '#bababd');
@@ -35,14 +37,16 @@ const Header = () => {
         </Box>
         <Spacer />
         <HStack>
-          <Box>Storage used: {(storageUsed() / 1024).toFixed(2)} KB</Box>
+          <Box>{t('components.header.storageUsed', { amount: (storageUsed() / 1024).toFixed(2) })}</Box>
           <Box className="color-switch">
             <Icon as={MoonIcon} style={{ opacity: colorMode === 'dark' ? 1 : 0 }} />
             <Switch colorScheme="gray" onChange={toggleColorMode} className="switch" />
             <Icon as={SunIcon} style={{ opacity: colorMode === 'light' ? 1 : 0 }} />
           </Box>
           <Box>
-            <Icon as={InfoOutlineIcon} /> Instructions
+            <span>
+              <Icon as={InfoOutlineIcon} /> {t('components.header.instructions')}
+            </span>
           </Box>
           {/* <Box>Logout</Box>
           <Box>

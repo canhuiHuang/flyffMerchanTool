@@ -88,11 +88,16 @@
       "surpassedExpectedEarnings": "Expected earnings surpassed!",
       "expectedTotalEarnings": "Expected Total Earnings",
       "freeMerchAmount": "Free Merch Amount",
-      "unexpectedEarningsMessage": "Register the item in items database for accurate calculations.",
+      "unexpectedEarningsMessage": "Register the item {{name}} in items database for accurate calculations.",
       "unexpectedSalesMessage": "Register the item's goal price in items database for accurate calculations.",
       "estimatedEarningsFromFreeMerchFormula": "∑ (item.goalPrice×item.freeItemsSold)"
+    },
+    "header": {
+      "storageUsed": "Storage used: {{amount}} KB",
+      "instructions": "Instructions"
     }
   },
+  "appInstructions": "Instructions:\n- Register your Merch in \"Merch in\"\n- Register your sales in \"Merch Out\"\n- Optionally (Recommended), register items in \"items database\" for better analytics\n- Your earnings and details are displayed on the far right panel",
   "Create your Account": "Create your Account",
   "password confirmation": "Password Confirmation",
   "Sign Up": "Sign Up",

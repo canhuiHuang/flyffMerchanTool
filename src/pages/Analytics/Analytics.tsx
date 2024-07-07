@@ -236,7 +236,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                       )}
 
                       {computed.expectedSales(item) <= 0 && (
-                        <Tooltip label={t('components.analytics.unexpectedSalesMessage')}>
+                        <Tooltip hasArrow label={t('components.analytics.unexpectedSalesMessage', { name: item.name })}>
                           {formatValue({
                             value: computed.expectedSales(item).toString(),
                             prefix: '$',
@@ -257,7 +257,10 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                       )}
 
                       {computed.expectedEarnings(item) <= 0 && (
-                        <Tooltip label={t('components.analytics.unexpectedEarningsMessage')}>
+                        <Tooltip
+                          hasArrow
+                          label={t('components.analytics.unexpectedEarningsMessage', { name: item.name })}
+                        >
                           {formatValue({
                             value: computed.expectedEarnings(item).toString(),
                             prefix: '$',
@@ -276,7 +279,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                         item.sales - item.spent >= computed.expectedEarnings(item) &&
                         '🎉'}
                       {/* {item.sales - item.spent > 0 && item.sales - item.spent >= computed.expectedEarnings(item) && (
-                        <Tooltip label={t('components.analytics.surpassedExpectedEarnings')}>🎉</Tooltip>
+                        <Tooltip hasArrow label={t('components.analytics.surpassedExpectedEarnings')}>🎉</Tooltip>
                       )} */}
                     </Td>
                   </Tr>

@@ -58,7 +58,8 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
   };
 
   const ratioClassification = (ratio: string): string => {
-    const ratioNumber = Number(ratio);
+    const ratioNumber = Number(ratio.replace('%', ''));
+    console.log(ratioNumber, ratio);
     if (ratioNumber >= 100 || ratio === '∞') return 'very-high';
     if (ratioNumber >= 80) return 'high';
     if (ratioNumber >= 50) return 'half';
@@ -208,10 +209,10 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                     {/* Sold */}
                     <Td
                       className={`align-center availability-ratio ratio ${ratioClassification(
-                        getRatio(item.sold / (item.freeMerchAmount + item.purchased - item.sold)),
+                        getRatio(item.sold / (item.purchased + item.freeMerchAmount)),
                       )}`}
                     >
-                      {item.sold} ({getRatio(item.sold / (item.freeMerchAmount + item.purchased - item.sold))})
+                      {item.sold} ({getRatio(item.sold / (item.purchased + item.freeMerchAmount))})
                     </Td>
 
                     {/* Sales / Spent */}

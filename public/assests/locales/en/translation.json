@@ -35,12 +35,10 @@
     "exportCSV": "Export as CSV",
     "inventory": "Inventory",
     "itemsDatabase": "Items Database",
-    "expectedTotalEarnings": "Expected Total Earnings",
     "fixData": "Fix data",
     "expectedSales": "Expected Sales",
-    "unexpectedEarningsMessage": "Item either doesn't exist in items database or doesn't have a goal price. Register the item in items database for accurate calculations.",
     "merchIn": "Merch in",
-    "merchOut": "Merch out"
+    "merchOut": "Merch out (Sales)"
   },
   "Language": "Language",
   "en": "English",
@@ -80,6 +78,19 @@
     "confirmModal": {
       "title": "Confirm",
       "defaultBody": "Are you sure?"
+    },
+    "analytics": {
+      "free": "Free",
+      "purchased": "Purchased",
+      "sold": "Sold",
+      "totalEarnings": "Total Earnings",
+      "estimatedEarningsFromFreeMerch": "Estimated free Merch Earnings",
+      "surpassedExpectedEarnings": "Expected earnings surpassed!",
+      "expectedTotalEarnings": "Expected Total Earnings",
+      "freeMerchAmount": "Free Merch Amount",
+      "unexpectedEarningsMessage": "Register the item in items database for accurate calculations.",
+      "unexpectedSalesMessage": "Register the item's goal price in items database for accurate calculations.",
+      "estimatedEarningsFromFreeMerchFormula": "∑ (item.goalPrice×item.freeItemsSold)"
     }
   },
   "Create your Account": "Create your Account",

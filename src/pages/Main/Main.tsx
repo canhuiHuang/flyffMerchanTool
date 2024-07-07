@@ -11,6 +11,7 @@ import ItemsManager from '../../components/ItemsManager/ItemsManager';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Analytics from '../Analytics/Analytics';
 import Confirm from '../../components/Modals/Confirm/Confirm';
+import { InventoryItem } from '../../utils/types';
 
 type keyName = 'description' | 'itemName' | 'price' | 'amount' | 'date' | 'goalPrice';
 type MerchType = 'merchIn' | 'merchOut' | 'items';
@@ -96,6 +97,7 @@ const Main = () => {
     save(type, newMerchArray);
   };
 
+  // Merch Mutators
   const addMerchIn = () => addMerch('merchIn');
   const addMerchOut = () => addMerch('merchOut');
   const addItem = () => addMerch('items');
@@ -109,6 +111,57 @@ const Main = () => {
   const deleteMerchIn = (selected: Array<string>) => deleteMerch('merchIn', selected);
   const deleteMerchOut = (selected: Array<string>) => deleteMerch('merchOut', selected);
   const deleteItems = (selected: Array<string>) => deleteMerch('items', selected);
+
+  // Analytics/Inventory Functions
+  const inventoryItems = (): Array<InventoryItem> => {
+    // Get unique item names
+    const uniqueItemNames = [...new Set(inventory.merchIn.map((item) => item.itemName))];
+    return uniqueItemNames.map((itemName) => generateInventoryItem(itemName));
+  };
+
+  const generateInventoryItem = (itemName: string): InventoryItem => {
+    // Free Merch Count
+    let freeMerchAmount = 0;
+
+    // Count purchased
+    let purchased: number = 0,
+      spent: number = 0;
+    const sameMerchInArray = inventory.merchIn.filter(
+      (merchItem) => merchItem.itemName && merchItem.itemName?.toUpperCase() === itemName?.toUpperCase(),
+    );
+    sameMerchInArray.forEach((merch) => {
+      if (merch.price) purchased += Number(merch.amount);
+      else freeMerchAmount += Number(merch.amount);
+      spent += Number(merch.amount) * Number(merch.price);
+    });
+
+    // Count sold && calculate sales
+    let sold: number = 0,
+      sales: number = 0;
+    const sameMerchOutArray = inventory.merchOut.filter(
+      (merchItem) => merchItem.itemName && merchItem.itemName?.toUpperCase() === itemName?.toUpperCase(),
+    );
+    sameMerchOutArray.forEach((merch) => {
+      sold += Number(merch.amount);
+      sales += Number(merch.amount) * Number(merch.price);
+    });
+
+    // Look item on items database
+    const databaseItem = inventory.items.filter(
+      (item) => item.name && item.name?.toUpperCase() === itemName?.toUpperCase(),
+    )[0];
+
+    return {
+      name: itemName,
+      description: databaseItem?.description,
+      purchased,
+      sold,
+      spent,
+      sales,
+      freeMerchAmount,
+      goalPrice: databaseItem?.goalPrice || 0,
+    };
+  };
 
   // useEffect(() => {
   //   const delayDebounceFn = setTimeout(() => {
@@ -178,7 +231,7 @@ const Main = () => {
               <MerchInput
                 type="out"
                 merch={inventory.merchOut}
-                items={inventory.items}
+                items={inventoryItems()}
                 updateMerch={updateMerchOut}
                 addMerch={addMerchOut}
                 deleteMerch={deleteMerchOut}
@@ -187,7 +240,7 @@ const Main = () => {
           )}
         </Box>
         <Box>
-          <Analytics inventory={inventory} />
+          <Analytics inventory={inventory} inventoryItems={inventoryItems()} />
         </Box>
       </div>
       <ItemsManager items={inventory.items} updateItem={updateItem} addItem={addItem} deleteItems={deleteItems} />

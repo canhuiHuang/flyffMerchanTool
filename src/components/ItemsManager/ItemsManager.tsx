@@ -86,10 +86,7 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                         <Td>
                           <Editable defaultValue={item.name || undefined}>
                             <EditablePreview />
-                            <EditableInput
-                              value={item.name}
-                              onChange={(e) => updateItem(idx, e.target.value, 'name')}
-                            />
+                            <EditableInput value={item.name} onBlur={(e) => updateItem(idx, e.target.value, 'name')} />
                           </Editable>
                         </Td>
                         <Td>
@@ -97,7 +94,7 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                             <EditablePreview />
                             <EditableInput
                               value={item.description}
-                              onChange={(e) => updateItem(idx, e.target.value, 'description')}
+                              onBlur={(e) => updateItem(idx, e.target.value, 'description')}
                             />
                           </Editable>
                         </Td>

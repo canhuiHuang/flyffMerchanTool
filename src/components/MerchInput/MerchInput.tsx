@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
-import { Item, Merch } from '../../utils/types';
+import { InventoryItem, Item, Merch } from '../../utils/types';
 
 import './MerchInput.scss';
 
 interface MerchInputProps {
   type: 'in' | 'out';
   merch: Array<Merch>;
-  items?: Array<Item>;
+  items?: Array<InventoryItem>;
   updateMerch: Function;
   addMerch: Function;
   deleteMerch: Function;
@@ -34,6 +34,13 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
     // Add confirmation modal later
     deleteMerch(selected);
     setSelected([]);
+  };
+
+  const inventoryDifference = (merchItem: Merch): number => {
+    // Get amount available in inventory
+    const item = items?.find((item) => item.name?.toUpperCase() === merchItem.itemName?.toUpperCase());
+    if (item) return merchItem.amount - (item.purchased - item.sold);
+    return -1 * merchItem.amount;
   };
 
   const expectedSales = (merchItem: Merch): number => {
@@ -81,19 +88,20 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                     <EditablePreview />
                     <EditableInput
                       value={item.description}
-                      onChange={(e) => updateMerch(idx, e.target.value, 'description')}
+                      onBlur={(e) => updateMerch(idx, e.target.value, 'description')}
                     />
                   </Editable>
                 </Td>
+
+                {/* Name */}
                 <Td className="name">
                   <Editable defaultValue={item.itemName || undefined}>
                     <EditablePreview />
-                    <EditableInput
-                      value={item.itemName}
-                      onChange={(e) => updateMerch(idx, e.target.value, 'itemName')}
-                    />
+                    <EditableInput value={item.itemName} onBlur={(e) => updateMerch(idx, e.target.value, 'itemName')} />
                   </Editable>
                 </Td>
+
+                {/* Price */}
                 <Td className="price">
                   <Editable>
                     <CurrencyInput
@@ -107,6 +115,8 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                     <Input as={EditableInput} />
                   </Editable>
                 </Td>
+
+                {/* Amount */}
                 <Td className="amount">
                   <Editable defaultValue={item.amount || undefined}>
                     <EditablePreview />
@@ -114,20 +124,24 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                       max="9999"
                       type="number"
                       value={item.amount}
-                      onChange={(e) => updateMerch(idx, e.target.value, 'amount')}
+                      onBlur={(e) => updateMerch(idx, e.target.value, 'amount')}
                     />
                   </Editable>
                 </Td>
+
+                {/* Date */}
                 <Td className="date">
                   <Editable defaultValue={item.date || undefined}>
                     <EditablePreview />
                     <EditableInput
                       type="date"
                       value={item.date}
-                      onChange={(e) => updateMerch(idx, e.target.value, 'date')}
+                      onBlur={(e) => updateMerch(idx, e.target.value, 'date')}
                     />
                   </Editable>
                 </Td>
+
+                {/* Total Spent */}
                 {type === 'in' && (
                   <Td>
                     {formatValue({
@@ -136,6 +150,8 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                     })}
                   </Td>
                 )}
+
+                {/* Real Sales / Expected Sales */}
                 {type === 'out' && (
                   <Td>
                     {formatValue({
@@ -149,6 +165,8 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                     })}
                   </Td>
                 )}
+
+                {/* Selection */}
                 <Td className="selection">
                   <Checkbox
                     onChange={(e) => onSelectHandle(e.target.checked, item.id)}

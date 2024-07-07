@@ -24,3 +24,14 @@ export interface Inventory {
   merchOut: Array<Merch>;
   items: Array<Item>;
 }
+
+export interface InventoryItem {
+  name: string;
+  description?: string;
+  purchased: number;
+  sold: number;
+  spent: number;
+  sales: number;
+  freeMerchAmount: number;
+  goalPrice?: number;
+}

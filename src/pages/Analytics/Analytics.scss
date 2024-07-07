@@ -7,6 +7,41 @@
   min-width: 500px;
   min-height: 70vh;
 
+  .earnings-row {
+    display: flex;
+    gap: 200px;
+
+    > * {
+      min-width: 400px;
+      max-width: 400px;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .summary.sales {
+    display: flex;
+    max-width: 480px;
+    // gap: 40px;
+
+    display: flex;
+
+    > * {
+      margin-right: 40px;
+      margin-top: 32px;
+      min-width: 200px;
+      max-width: 200px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .chakra-stat__number {
+      display: flex;
+      font-size: 20px;
+    }
+  }
+
   .earnings {
     .chakra-stat__number {
       font-size: 36px;
@@ -20,29 +55,21 @@
     }
   }
 
-  .sales {
-    display: flex;
-
-    > * {
-      margin-right: 40px;
-      margin-top: 32px;
-    }
-    .chakra-stat__number {
-      display: flex;
-      font-size: 20px;
-    }
-  }
-
   h2 {
     margin-bottom: 8px;
   }
 
-  .expected-total-earnings {
+  .expected-total-earnings,
+  .estimated-earnings-from-free-merch {
+    margin-bottom: 4px;
     font-size: 13px;
   }
 
   .gold {
     color: rgb(240, 181, 105);
+  }
+  .positive {
+    color: rgb(128, 187, 128);
   }
 
   .table {

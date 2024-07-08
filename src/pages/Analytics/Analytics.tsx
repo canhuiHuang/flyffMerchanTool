@@ -49,12 +49,60 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
     return penya;
   };
 
-  const estimatedTotalProfitFromFreeMerch = (): number => {
+  const calculatedTotalProfitFromFreeMerch = (): number => {
     let penya: number = 0;
     inventoryItems.forEach((item) => {
-      penya += computed.estimatedProfitFromFreeMerch(item);
+      penya += calculatedProfitFromFreeMerch(item);
     });
     return penya;
+  };
+
+  const calculatedProfitFromFreeMerch = (item: InventoryItem): number => {
+    // Free Merch profit is calculated based on the basis that purchased merch are sold before free merch
+
+    // Case 1: No purchased Merch at all
+    // Since no merch has ever been purchased for this item, its profit is just the sum of all merch outs prices of this item
+    if (Number(item.purchased) === 0) return item.sales;
+
+    // Case 2: Availability is greater than the amount of free merch available
+    // Since it's purchased merch sold first basis, then this means that no free merch has been sold yet
+    if (Number(item.freeMerchAmount) <= computed.availability(item)) return 0;
+
+    // Case 3: freeAmount > availability: at least one free merch has been already sold
+    // So profit from free merch is the sum of the last (freeMerchAmount) merchOut sales
+    if (Number(item.freeMerchAmount) > computed.availability(item)) {
+      const sortedByDateMerchOut = [...merchOut]
+        .filter((merchItem: Merch) => merchItem.itemName?.toUpperCase() === item.name?.toUpperCase())
+        .sort((a: Merch, b: Merch) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          console.log(dateB.getTime() - dateA.getTime());
+          return dateB.getTime() - dateA.getTime();
+        });
+      let sale: number = 0;
+      let freeMerchSold: number = Number(item.freeMerchAmount) - Math.abs(computed.availability(item));
+
+      if (freeMerchSold > 0) {
+        for (let i = 0; i < sortedByDateMerchOut.length; i++) {
+          const merchItem = sortedByDateMerchOut[i];
+          // console.log(sale, freeMerchSold, Number(merchItem.amount));
+
+          if (Number(merchItem.amount) <= freeMerchSold) {
+            sale += Number(merchItem.price) * Number(merchItem.amount);
+            freeMerchSold -= Number(merchItem.amount);
+          } else {
+            sale += Number(merchItem.price) * Number(freeMerchSold);
+            freeMerchSold = 0;
+          }
+
+          if (freeMerchSold === 0) break;
+        }
+
+        return sale; // Since sale is from free merch, sale = profit
+      }
+    }
+
+    return 0;
   };
 
   const ratioClassification = (ratio: string): string => {
@@ -75,13 +123,8 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
     expectedSales: (item: InventoryItem) => (item.purchased + item.freeMerchAmount) * (item.goalPrice || 0),
     expectedProfit: (item: InventoryItem) => computed.expectedSales(item) - item.spent,
     expectedTotalProfit: (): number => expectedTotalSales() - totalSpent(),
+    availability: (item: InventoryItem): number => item.freeMerchAmount + item.purchased - item.sold,
     totalProfit: (): number => totalSales() - totalSpent(),
-    estimatedProfitFromFreeMerch: (item: InventoryItem): number => {
-      if (Number(item.freeMerchAmount) > Number(item.sold)) {
-        return Number(item.goalPrice) * Number(item.sold);
-      }
-      return Number(item.goalPrice) * Number(item.freeMerchAmount);
-    },
   };
 
   return (
@@ -100,15 +143,18 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
             </StatNumber>
           </Stat>
 
-          <p className="estimated-profit-from-free-merch">
-            {t('components.analytics.estimatedProfitFromFreeMerch')}:{' '}
-            <b className="positive">
-              {formatValue({
-                value: estimatedTotalProfitFromFreeMerch().toString(),
-                prefix: '$',
-              })}
-            </b>
-          </p>
+          <Tooltip hasArrow label={t('components.analytics.freeMerchProfitCalculations')}>
+            <p className="estimated-profit-from-free-merch">
+              {t('components.analytics.calculatedProfitFromFreeMerch')}:{' '}
+              <b className="positive">
+                {formatValue({
+                  value: calculatedTotalProfitFromFreeMerch().toString(),
+                  prefix: '$',
+                })}
+              </b>
+            </p>
+          </Tooltip>
+
           <p className="expected-total-profit">
             {t('components.analytics.expectedTotalProfit')}:{' '}
             <b className="gold">
@@ -203,7 +249,18 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                     <Td>{item.purchased}</Td>
 
                     {/* Available */}
-                    <Td>{item.freeMerchAmount + item.purchased - item.sold}</Td>
+                    <Td className={`${computed.availability(item) < 0 ? 'error' : ''}`}>
+                      {computed.availability(item) >= 0 && <span>{computed.availability(item)}</span>}
+
+                      {computed.availability(item) < 0 && (
+                        <Tooltip
+                          hasArrow
+                          label={t('components.analytics.unexpectedAvailabilityMessage', { name: item.name })}
+                        >
+                          <span>{computed.availability(item)}</span>
+                        </Tooltip>
+                      )}
+                    </Td>
 
                     {/* Sold */}
                     <Td

@@ -86,13 +86,15 @@
       "purchased": "Purchased",
       "sold": "Sold",
       "totalProfit": "Total Profit",
-      "estimatedProfitFromFreeMerch": "Estimated free Merch Profit",
+      "calculatedProfitFromFreeMerch": "Free Merch Profit",
       "surpassedExpectedProfit": "Expected profit surpassed!",
       "expectedTotalProfit": "Expected Total Profit",
       "freeMerchAmount": "Free Merch Amount",
       "unexpectedProfitMessage": "Register the item {{name}} in items database for accurate calculations.",
       "unexpectedSalesMessage": "Register the item's goal price in items database for accurate calculations.",
-      "estimatedProfitFromFreeMerchFormula": "∑ (item.goalPrice×item.freeItemsSold)"
+      "unexpectedAvailabilityMessage": "There must be a mistake on Merch In amount and/or Merch out amount.",
+      "estimatedProfitFromFreeMerchFormula": "∑ (item.goalPrice×item.freeItemsSold)",
+      "freeMerchProfitCalculations": "Free Merch profit is calculated based on the basis that purchased merch are sold before free merch."
     },
     "header": {
       "storageUsed": "Storage used: {{amount}} KB",

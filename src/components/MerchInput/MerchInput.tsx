@@ -145,7 +145,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
                 {type === 'in' && (
                   <Td>
                     {formatValue({
-                      value: (item.price * item.amount).toString(),
+                      value: (item.price * item.amount || 0).toString(),
                       prefix: '$',
                     })}
                   </Td>

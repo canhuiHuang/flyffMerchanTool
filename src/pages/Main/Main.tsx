@@ -133,7 +133,7 @@ const Main = () => {
       console.log(merch, merch.price);
       if (Number(merch.price)) purchased += Number(merch.amount);
       else freeMerchAmount += Number(merch.amount);
-      spent += Number(merch.amount) * Number(merch.price);
+      spent += Number(merch.amount) * (Number(merch.price) || 0);
     });
 
     // Count sold && calculate sales

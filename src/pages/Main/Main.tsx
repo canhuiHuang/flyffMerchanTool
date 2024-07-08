@@ -115,7 +115,8 @@ const Main = () => {
   // Analytics/Inventory Functions
   const inventoryItems = (): Array<InventoryItem> => {
     // Get unique item names
-    const uniqueItemNames = [...new Set(inventory.merchIn.map((item) => item.itemName))];
+    const uniqueItemNames = [...new Set(inventory.merchIn.map((item) => item.itemName?.toUpperCase()))];
+
     return uniqueItemNames.map((itemName) => generateInventoryItem(itemName));
   };
 
@@ -153,7 +154,7 @@ const Main = () => {
     )[0];
 
     return {
-      name: itemName,
+      name: sameMerchInArray[0]?.itemName || itemName,
       description: databaseItem?.description,
       purchased,
       sold,

@@ -130,7 +130,8 @@ const Main = () => {
       (merchItem) => merchItem.itemName && merchItem.itemName?.toUpperCase() === itemName?.toUpperCase(),
     );
     sameMerchInArray.forEach((merch) => {
-      if (merch.price) purchased += Number(merch.amount);
+      console.log(merch, merch.price);
+      if (Number(merch.price)) purchased += Number(merch.amount);
       else freeMerchAmount += Number(merch.amount);
       spent += Number(merch.amount) * Number(merch.price);
     });

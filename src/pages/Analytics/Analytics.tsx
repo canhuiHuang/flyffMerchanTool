@@ -44,7 +44,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
   const expectedTotalSales = (): number => {
     let penya: number = 0;
     inventoryItems.forEach((item) => {
-      penya += Number(item.goalPrice) * Number(item.purchased);
+      penya += Number(item.goalPrice) * (Number(item.purchased) + Number(item.freeMerchAmount));
     });
     return penya;
   };

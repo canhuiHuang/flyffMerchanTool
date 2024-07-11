@@ -78,7 +78,7 @@ a {
     // background-color: red;
     display: block;
     overflow-y: scroll;
-    max-height: 600px;
+    max-height: 900px;
   }
 
   tr {
@@ -128,6 +128,10 @@ a {
     &.sales-over-expected {
       width: 270px;
       max-width: 270px;
+    }
+    &.goal-price {
+      min-width: 170px;
+      max-width: 170px;
     }
     &.selection {
       min-width: 40px;

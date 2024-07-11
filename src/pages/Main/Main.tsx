@@ -97,6 +97,18 @@ const Main = () => {
     save(type, newMerchArray);
   };
 
+  const unlistMerch = (type: MerchType, selected: Array<string>, val: boolean = true) => {
+    const newMerchArray = [...inventory[type]].map((item) => {
+      if (selected.includes(item.id))
+        return {
+          ...item,
+          unlisted: val,
+        };
+      return item;
+    });
+    save(type, newMerchArray);
+  };
+
   // Merch Mutators
   const addMerchIn = () => addMerch('merchIn');
   const addMerchOut = () => addMerch('merchOut');
@@ -112,10 +124,17 @@ const Main = () => {
   const deleteMerchOut = (selected: Array<string>) => deleteMerch('merchOut', selected);
   const deleteItems = (selected: Array<string>) => deleteMerch('items', selected);
 
+  const unlistMerchIn = (selected: Array<string>) => unlistMerch('merchIn', selected);
+  const unlistMerchOut = (selected: Array<string>) => unlistMerch('merchOut', selected);
+  const listMerchIn = (selected: Array<string>) => unlistMerch('merchIn', selected, false);
+  const listMerchOut = (selected: Array<string>) => unlistMerch('merchOut', selected, false);
+
   // Analytics/Inventory Functions
   const inventoryItems = (): Array<InventoryItem> => {
     // Get unique item names
-    const uniqueItemNames = [...new Set(inventory.merchIn.map((item) => item.itemName?.toUpperCase()))];
+    const uniqueItemNames = [
+      ...new Set(inventory.merchIn.filter((item) => !item.unlisted).map((item) => item.itemName?.toUpperCase())),
+    ];
 
     return uniqueItemNames.map((itemName) => generateInventoryItem(itemName));
   };
@@ -228,6 +247,8 @@ const Main = () => {
                 updateMerch={updateMerchIn}
                 addMerch={addMerchIn}
                 deleteMerch={deleteMerchIn}
+                unlistMerch={unlistMerchIn}
+                listMerch={listMerchIn}
               />
               <MerchInput
                 type="out"
@@ -236,6 +257,8 @@ const Main = () => {
                 updateMerch={updateMerchOut}
                 addMerch={addMerchOut}
                 deleteMerch={deleteMerchOut}
+                unlistMerch={unlistMerchOut}
+                listMerch={listMerchOut}
               />
             </>
           )}

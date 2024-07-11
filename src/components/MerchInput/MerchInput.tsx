@@ -16,9 +16,20 @@ interface MerchInputProps {
   updateMerch: Function;
   addMerch: Function;
   deleteMerch: Function;
+  unlistMerch: Function;
+  listMerch: Function;
 }
 
-const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: MerchInputProps) => {
+const MerchInput = ({
+  type,
+  merch,
+  items,
+  updateMerch,
+  addMerch,
+  deleteMerch,
+  unlistMerch,
+  listMerch,
+}: MerchInputProps) => {
   const { t } = useTranslation();
 
   const [selected, setSelected] = useState<Array<string>>([]);
@@ -33,6 +44,16 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
   const onDeleteHandler = () => {
     // Add confirmation modal later
     deleteMerch(selected);
+    setSelected([]);
+  };
+
+  const onUnlistHandler = () => {
+    unlistMerch(selected);
+    setSelected([]);
+  };
+
+  const onListHandler = () => {
+    listMerch(selected);
     setSelected([]);
   };
 
@@ -55,6 +76,14 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           <Stack>
             <Button colorScheme="red" variant="outline" w="120px" size="sm" onClick={onDeleteHandler}>
               🗑️ {t('general.delete')}
+            </Button>
+
+            <Button colorScheme="gray" variant="outline" w="120px" size="sm" onClick={onUnlistHandler}>
+              📋 {t('general.unlist')}
+            </Button>
+
+            <Button colorScheme="gray" variant="outline" w="120px" size="sm" onClick={onListHandler}>
+              📋 {t('general.list')}
             </Button>
           </Stack>
         </Box>
@@ -82,7 +111,10 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
           </Thead>
           <Tbody>
             {merch.map((item: Merch, idx: number) => (
-              <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'} highlightable`}>
+              <Tr
+                key={item.id || idx}
+                className={`${item.id ? 'has-id' : 'no-id'} ${item.unlisted ? 'unlisted' : ''} highlightable`}
+              >
                 <Td className="description">
                   <Editable defaultValue={item.description || undefined}>
                     <EditablePreview />

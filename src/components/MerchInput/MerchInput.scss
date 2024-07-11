@@ -12,6 +12,18 @@
     }
   }
 
+  .chakra-stack {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    // justify-content: center;
+
+    > * {
+      margin-top: 0;
+      margin-right: 18px;
+    }
+  }
+
   .table {
     // overflow-y: scroll;
     // max-height: 80vh;

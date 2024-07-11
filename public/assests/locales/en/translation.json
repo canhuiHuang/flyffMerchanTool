@@ -39,7 +39,9 @@
     "fixData": "Fix data",
     "expectedSales": "Expected Sales",
     "merchIn": "Merch in",
-    "merchOut": "Merch out (Sales)"
+    "merchOut": "Merch out (Sales)",
+    "unlist": "unlist",
+    "list": "list"
   },
   "Language": "Language",
   "en": "English",

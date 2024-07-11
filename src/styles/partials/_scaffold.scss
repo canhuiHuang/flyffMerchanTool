@@ -85,6 +85,9 @@ a {
     &.no-id {
       background-color: rgba(230, 78, 78, 0.1);
     }
+    &.unlisted {
+      background-color: rgba(160, 160, 160, 0.5);
+    }
   }
 
   td,

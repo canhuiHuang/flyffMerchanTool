@@ -5,6 +5,7 @@ export interface Merch {
   price: any;
   amount: any;
   date: any;
+  unlisted?: boolean;
 }
 
 export interface Item {

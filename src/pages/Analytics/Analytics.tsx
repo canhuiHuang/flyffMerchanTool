@@ -76,7 +76,6 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
         .sort((a: Merch, b: Merch) => {
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
-          console.log(dateB.getTime() - dateA.getTime());
           return dateB.getTime() - dateA.getTime();
         });
       let sale: number = 0;
@@ -85,7 +84,6 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
       if (freeMerchSold > 0) {
         for (let i = 0; i < sortedByDateMerchOut.length; i++) {
           const merchItem = sortedByDateMerchOut[i];
-          // console.log(sale, freeMerchSold, Number(merchItem.amount));
 
           if (Number(merchItem.amount) <= freeMerchSold) {
             sale += Number(merchItem.price) * Number(merchItem.amount);
@@ -216,17 +214,17 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
           <Table variant="simple" size="sm">
             <Thead>
               <Tr>
-                <Th>{t('fields.title.itemName')}</Th>
-                {/* <Th>{t('fields.title.description')}</Th> */}
-                <Th>{t('fields.title.goalPrice')}</Th>
-                <Th>{t('components.analytics.free')}</Th>
-                <Th>{t('components.analytics.purchased')}</Th>
-                <Th>{t('fields.title.available')}</Th>
-                <Th>{t('components.analytics.sold')}</Th>
-                <Th>{t('fields.title.saleOverSpent')}</Th>
-                <Th>{t('fields.title.expectedSales')}</Th>
-                <Th>{t('fields.title.expectedProfit')}</Th>
-                <Th>{t('fields.title.profit')}</Th>
+                <Th className="name">{t('fields.title.itemName')}</Th>
+                {/* <Th className="description">{t('fields.title.description')}</Th> */}
+                <Th className="goal-price">{t('fields.title.goalPrice')}</Th>
+                <Th className="free">{t('components.analytics.free')}</Th>
+                <Th className="purchased">{t('components.analytics.purchased')}</Th>
+                <Th className="available">{t('fields.title.available')}</Th>
+                <Th className="sold">{t('components.analytics.sold')}</Th>
+                <Th className="sales-over-spent">{t('fields.title.saleOverSpent')}</Th>
+                <Th className="expected-sales">{t('fields.title.expectedSales')}</Th>
+                <Th className="expected-profit">{t('fields.title.expectedProfit')}</Th>
+                <Th className="profit">{t('fields.title.profit')}</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -234,22 +232,22 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                 inventoryItems.map((item, idx) => (
                   <Tr key={idx} className="highlightable">
                     {/* Name */}
-                    <Td>{item.name}</Td>
+                    <Td className="name">{item.name}</Td>
 
                     {/* Description */}
-                    {/* <Td>{item.description}</Td> */}
+                    {/* <Td className="description">{item.description}</Td> */}
 
                     {/* Goal Price */}
-                    <Td>{formatValue({ value: item.goalPrice?.toString(), prefix: '$' })}</Td>
+                    <Td className="goal-price">{formatValue({ value: item.goalPrice?.toString(), prefix: '$' })}</Td>
 
                     {/* Free */}
-                    <Td>{item.freeMerchAmount}</Td>
+                    <Td className="free">{item.freeMerchAmount}</Td>
 
                     {/* Purchased */}
-                    <Td>{item.purchased}</Td>
+                    <Td className="purchased">{item.purchased}</Td>
 
                     {/* Available */}
-                    <Td className={`${computed.availability(item) < 0 ? 'error' : ''}`}>
+                    <Td className={`available ${computed.availability(item) < 0 ? 'error' : ''}`}>
                       {computed.availability(item) >= 0 && <span>{computed.availability(item)}</span>}
 
                       {computed.availability(item) < 0 && (
@@ -264,7 +262,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
 
                     {/* Sold */}
                     <Td
-                      className={`align-center availability-ratio ratio ${ratioClassification(
+                      className={`sold align-center availability-ratio ratio ${ratioClassification(
                         getRatio(item.sold / (item.purchased + item.freeMerchAmount)),
                       )}`}
                     >
@@ -273,7 +271,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
 
                     {/* Sales / Spent */}
                     <Td
-                      className={`align-center profit-ratio ratio ${ratioClassification(
+                      className={`sales-over-spent align-center profit-ratio ratio ${ratioClassification(
                         getRatio(item.sales / item.spent),
                       )}`}
                     >
@@ -282,7 +280,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                     </Td>
 
                     {/* Expected Sales */}
-                    <Td className={`${computed.expectedSales(item) <= 0 ? 'error' : ''}`}>
+                    <Td className={`expected-sales ${computed.expectedSales(item) <= 0 ? 'error' : ''}`}>
                       {computed.expectedSales(item) > 0 && (
                         <span>
                           {formatValue({
@@ -303,7 +301,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                     </Td>
 
                     {/* Expected Profit */}
-                    <Td className={`${computed.expectedProfit(item) < 0 ? 'error' : ''}`}>
+                    <Td className={`expected-profit ${computed.expectedProfit(item) < 0 ? 'error' : ''}`}>
                       {computed.expectedProfit(item) > 0 && (
                         <span>
                           {formatValue({
@@ -327,7 +325,7 @@ const Analytics = ({ inventory: { merchIn, merchOut }, inventoryItems }: Props) 
                     </Td>
 
                     {/* Profit */}
-                    <Td className={`${item.sales - item.spent > 0 ? 'good' : 'bad'}`}>
+                    <Td className={`profit ${item.sales - item.spent > 0 ? 'good' : 'bad'}`}>
                       {formatValue({
                         value: (item.sales - item.spent).toString(),
                         prefix: '$',

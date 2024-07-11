@@ -67,6 +67,20 @@ a {
     }
   }
 
+  Thead {
+    // background-color: red;
+    display: block;
+    position: sticky;
+    top: 0;
+  }
+
+  Tbody {
+    // background-color: red;
+    display: block;
+    overflow-y: scroll;
+    max-height: 600px;
+  }
+
   tr {
     &.no-id {
       background-color: rgba(230, 78, 78, 0.1);
@@ -78,6 +92,47 @@ a {
     &:first-child,
     &:nth-child(2) {
       border-right: 1px solid;
+    }
+
+    &.description {
+      min-width: 110px;
+      max-width: 110px;
+    }
+    &.name {
+      min-width: 142px;
+      max-width: 142px;
+    }
+    &.price {
+      max-width: 150px;
+      min-width: 150px;
+    }
+    &.amount {
+      width: 80px;
+      max-width: 80px;
+    }
+    &.date {
+      min-width: 126px;
+      max-width: 126px;
+      input {
+        width: 102px;
+        max-width: 102px;
+      }
+    }
+    &.total-spent {
+      min-width: 170px;
+      max-width: 170px;
+    }
+    &.sales-over-expected {
+      width: 270px;
+      max-width: 270px;
+    }
+    &.selection {
+      min-width: 40px;
+      max-width: 40px;
+      text-align: center;
+    }
+    &.align-center {
+      text-align: center;
     }
   }
 
@@ -91,40 +146,11 @@ a {
     padding: 0 20px;
     max-width: 280px;
 
+    // border-collapse: collapse;
+
     .chakra-editable__preview {
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    &.amount {
-      width: 40px;
-      max-width: 40px;
-    }
-
-    &.name {
-      min-width: 142px;
-      max-width: 142px;
-    }
-
-    &.price {
-      max-width: 150px;
-      min-width: 150px;
-    }
-
-    &.date {
-      input {
-        width: 102px;
-        max-width: 102px;
-      }
-    }
-
-    &.selection {
-      max-width: 40px;
-      text-align: center;
-    }
-
-    &.align-center {
-      text-align: center;
     }
   }
 

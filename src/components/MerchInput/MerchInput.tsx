@@ -70,20 +70,20 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
         <Table size="sm" variant="simple">
           <Thead>
             <Tr>
-              <Th>{t('fields.title.description')}</Th>
-              <Th>{t('fields.title.itemName')}</Th>
-              <Th>{t('fields.title.price')}</Th>
-              <Th>{t('fields.title.amount')}</Th>
-              <Th>{t('fields.title.date')}</Th>
-              {type === 'in' && <Th>{t('general.totalSpent')}</Th>}
-              {type === 'out' && <Th>{t('general.saleOverExpectedSales')}</Th>}
+              <Th className="description">{t('fields.title.description')}</Th>
+              <Th className="name">{t('fields.title.itemName')}</Th>
+              <Th className="price">{t('fields.title.price')}</Th>
+              <Th className="amount">{t('fields.title.amount')}</Th>
+              <Th className="date">{t('fields.title.date')}</Th>
+              {type === 'in' && <Th className="total-spent">{t('general.totalSpent')}</Th>}
+              {type === 'out' && <Th className="sales-over-expected">{t('general.saleOverExpectedSales')}</Th>}
               <Th className="selection">{/* t('general.selection') */}</Th>
             </Tr>
           </Thead>
           <Tbody>
             {merch.map((item: Merch, idx: number) => (
               <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'} highlightable`}>
-                <Td>
+                <Td className="description">
                   <Editable defaultValue={item.description || undefined}>
                     <EditablePreview />
                     <EditableInput
@@ -143,7 +143,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
 
                 {/* Total Spent */}
                 {type === 'in' && (
-                  <Td>
+                  <Td className="total-spent">
                     {formatValue({
                       value: (item.price * item.amount || 0).toString(),
                       prefix: '$',
@@ -153,7 +153,7 @@ const MerchInput = ({ type, merch, items, updateMerch, addMerch, deleteMerch }: 
 
                 {/* Real Sales / Expected Sales */}
                 {type === 'out' && (
-                  <Td>
+                  <Td className="sales-over-expected">
                     {formatValue({
                       value: (item.price * item.amount).toString(),
                       prefix: '$',

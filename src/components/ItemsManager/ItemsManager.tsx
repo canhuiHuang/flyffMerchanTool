@@ -74,22 +74,25 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                 <Table size="sm">
                   <Thead>
                     <Tr>
-                      <Th>{t('fields.title.itemName')}</Th>
-                      <Th>{t('fields.title.description')}</Th>
-                      <Th>{t('fields.title.goalPrice')}</Th>
+                      <Th className="name">{t('fields.title.itemName')}</Th>
+                      <Th className="description">{t('fields.title.description')}</Th>
+                      <Th className="goal-price">{t('fields.title.goalPrice')}</Th>
                       <Th className="selection">{/* t('general.selection') */}</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {items.map((item, idx) => (
                       <Tr key={item.id || idx} className={`${item.id ? 'has-id' : 'no-id'} highlightable`}>
-                        <Td>
+                        {/* Name */}
+                        <Td className="name">
                           <Editable defaultValue={item.name || undefined}>
                             <EditablePreview />
                             <EditableInput value={item.name} onBlur={(e) => updateItem(idx, e.target.value, 'name')} />
                           </Editable>
                         </Td>
-                        <Td>
+
+                        {/* Description */}
+                        <Td className="description">
                           <Editable defaultValue={item.description || undefined}>
                             <EditablePreview />
                             <EditableInput
@@ -98,7 +101,9 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                             />
                           </Editable>
                         </Td>
-                        <Td className="price">
+
+                        {/* Goal Price */}
+                        <Td className="price goal-price">
                           <Editable>
                             <CurrencyInput
                               name="goalPrice"
@@ -111,6 +116,8 @@ const ItemsManager = ({ items, updateItem, addItem, deleteItems }: Props) => {
                             <Input as={EditableInput} />
                           </Editable>
                         </Td>
+
+                        {/* Selection */}
                         <Td className="selection">
                           <Checkbox
                             onChange={(e) => onSelectHandle(e.target.checked, item.id)}
